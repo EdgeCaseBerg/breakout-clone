@@ -1,0 +1,80 @@
+package spare.peetseater.games;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.ScreenUtils;
+
+public class InitialLoadingScreen implements Screen {
+    private final AssetManager assetManager;
+    private final SpriteBatch batch;
+    private final BitmapFont bitmapFont;
+    private float elapsedSeconds;
+    private int pulse;
+
+    public InitialLoadingScreen(BustOutRun game) {
+        this.bitmapFont = new BitmapFont(false);
+        this.assetManager = game.assetManager;
+        this.batch = game.batch;
+        this.elapsedSeconds = 0;
+        this.pulse = 1;
+    }
+
+
+    @Override
+    public void render(float delta) {
+        assetManager.update(17);
+        float alpha = MathUtils.lerp(0, 100, elapsedSeconds);
+        int loaded = (int)(assetManager.getProgress() * 100);
+        Color color = new Color(0,1,0,alpha/100f);
+        ScreenUtils.clear(Color.BLACK);
+        batch.begin();
+        batch.enableBlending();
+        bitmapFont.setColor(color);
+        bitmapFont.draw(batch, String.format("Loading %d%%", loaded), 0, Gdx.graphics.getHeight()/2f, Gdx.graphics.getWidth(), Align.center, false);
+        batch.end();
+        elapsedSeconds += delta * pulse;
+        if (elapsedSeconds > 1) {
+            pulse = -1;
+        } else if (elapsedSeconds < 0) {
+            pulse = 1;
+        }
+    }
+
+    @Override
+    public void dispose() {
+        this.bitmapFont.dispose();
+    }
+
+    @Override
+    public void show() {
+
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        if(width <= 0 || height <= 0) return;
+        // we dont need to resize because the loading screen isn't using a camera.
+    }
+
+    @Override
+    public void pause() {
+        elapsedSeconds = 0;
+    }
+
+    @Override
+    public void resume() {
+        elapsedSeconds = 0;
+    }
+
+    @Override
+    public void hide() {
+        elapsedSeconds = 0;
+    }
+
+}
