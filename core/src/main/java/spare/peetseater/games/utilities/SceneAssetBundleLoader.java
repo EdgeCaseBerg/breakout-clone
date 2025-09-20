@@ -49,6 +49,10 @@ public class SceneAssetBundleLoader extends AsynchronousAssetLoader<SceneAssetBu
 
     @Override
     public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, SceneAssetBundleParam parameter) {
+        if (parameter == null) {
+            return new Array<>();
+        }
+
         Array<AssetDescriptor> array = new Array<>();
         for (AssetDescriptor a : parameter.getDependencies()) {
             array.add(a);
