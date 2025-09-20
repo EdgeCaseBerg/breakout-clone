@@ -10,12 +10,9 @@ import spare.peetseater.games.utilities.TemporaryTexture;
 import spare.peetseater.games.utilities.TemporaryTextureLoader;
 
 public class GameAssets {
-    private final AssetManager assetManager;
-
-    public GameAssets(AssetManager assetManager) {
-        this.assetManager = assetManager;
-
-        this.assetManager.setLoader(TemporaryTexture.class, new TemporaryTextureLoader(assetManager.getFileHandleResolver()));
+    public static void configure(AssetManager assetManager) {
+        assetManager.setLoader(TemporaryTexture.class, new TemporaryTextureLoader(assetManager.getFileHandleResolver()));
+        assetManager.setLoader(SceneAssetBundle.class, new SceneAssetBundleLoader(assetManager.getFileHandleResolver()));
     }
 
     public static final String PLAYER_ASSET_KEY = "player";
