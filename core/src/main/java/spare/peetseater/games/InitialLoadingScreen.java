@@ -9,8 +9,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
+import spare.peetseater.games.screens.Scene;
 
-public class InitialLoadingScreen implements Screen {
+public class InitialLoadingScreen implements Screen, Scene {
     private final AssetManager assetManager;
     private final SpriteBatch batch;
     private final BitmapFont bitmapFont;
@@ -20,6 +21,7 @@ public class InitialLoadingScreen implements Screen {
     public InitialLoadingScreen(BustOutRun game) {
         this.bitmapFont = new BitmapFont(false);
         this.assetManager = game.assetManager;
+        this.assetManager.load(GameAssets.INITIAL_LOADING_SCREEN_BUNDLE);
         this.batch = game.batch;
         this.elapsedSeconds = 0;
         this.pulse = 1;
@@ -77,4 +79,13 @@ public class InitialLoadingScreen implements Screen {
         elapsedSeconds = 0;
     }
 
+    @Override
+    public String getBundleName() {
+        return GameAssets.INITIAL_LOADING_SCREEN_BUNDLE_KEY;
+    }
+
+    @Override
+    public Screen getScreen() {
+        return this;
+    }
 }
