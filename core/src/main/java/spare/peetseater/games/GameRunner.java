@@ -131,21 +131,6 @@ public class GameRunner implements ApplicationListener {
         toLoad.add(scene);
     }
 
-    private Texture screenshot() {
-        FrameBuffer frameBuffer = new FrameBuffer(
-            Pixmap.Format.RGBA8888,
-            1280,
-            800,
-            false
-        );
-        batch.flush();
-        frameBuffer.begin();
-        batch.begin();
-        currentScreen.render(0);
-        batch.end();
-        frameBuffer.end();
-        return frameBuffer.getColorBufferTexture();
-    }
     @Override
     public void pause() {
 
@@ -153,6 +138,6 @@ public class GameRunner implements ApplicationListener {
 
     @Override
     public void resume() {
-
+        this.assetManager.finishLoading();
     }
 }
