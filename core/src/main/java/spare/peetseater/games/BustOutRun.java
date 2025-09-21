@@ -62,28 +62,12 @@ public class BustOutRun extends Game {
         ScreenSignal signal = currentScreen.update(delta);
         switch (signal) {
             case OVERLAY_SCENE:
-                loadSceneOnSignal();
+                Gdx.app.log(getClass().getSimpleName(), "OVERLAY");
+                overlayScene();
                 break;
             case UNLOAD:
-                if (toLoad.isEmpty()) {
-                    Gdx.app.log("SCENES", "asked to unload current scene but there is no scene to return to");
-                    throw new RuntimeException("...");
-                }
-                Scene nextScene = toLoad.peek();
-                if (assetManager.isLoaded(nextScene.getBundleName())) {
-                    if (loadingScreen != currentScreen) {
-                        assetManager.unload(currentScreen.getBundleName());
-                        currentScreen.getScreen().dispose();
-                    }
-                    currentScreen = toLoad.poll();
-                    setScreen(currentScreen.getScreen());
-                } else {
-                    currentScreen = loadingScreen;
-                    if (!getScreen().equals(loadingScreen.getScreen())) {
-                        setScreen(loadingScreen.getScreen());
-                    }
-                }
-
+                Gdx.app.log(getClass().getSimpleName(), "UNLOAD");
+                unloadScene();
                 break;
             case CONTINUE:
             default:
@@ -92,14 +76,39 @@ public class BustOutRun extends Game {
 
     }
 
-    private void loadSceneOnSignal() {
+    private void unloadScene() {
         if (toLoad.isEmpty()) {
-            Gdx.app.log("SCENES", "asked to load next scene but there is none queued");
+            Gdx.app.log("SCENES", "asked to unload current scene but there is no scene to return to");
             throw new RuntimeException("...");
+        }
+        Scene nextScene = toLoad.peek();
+        if (assetManager.isLoaded(nextScene.getBundleName())) {
+            if (loadingScreen != currentScreen) {
+                assetManager.unload(currentScreen.getBundleName());
+                currentScreen.getScreen().dispose();
+            }
+            currentScreen = toLoad.poll();
+            setScreen(currentScreen.getScreen());
+        } else {
+            currentScreen = loadingScreen;
+            if (!getScreen().equals(loadingScreen.getScreen())) {
+                setScreen(loadingScreen.getScreen());
+            }
+        }
+    }
+
+    private void overlayScene() {
+        if (toLoad.isEmpty()) {
+            String message = "asked to load next scene but there is none queued";
+            Gdx.app.log(getClass().getSimpleName(), message);
+            throw new RuntimeException(message);
         }
 
         Scene nextScene = toLoad.peek();
         if (assetManager.isLoaded(nextScene.getBundleName())) {
+            // Place the scene we're coming from onto the queue so
+            // we can return to it when the next screen signals UNLOAD
+            toLoad.add(currentScreen);
             currentScreen = toLoad.poll();
             setScreen(currentScreen.getScreen());
         } else {
