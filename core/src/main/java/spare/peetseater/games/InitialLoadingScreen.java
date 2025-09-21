@@ -1,24 +1,21 @@
 package spare.peetseater.games;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
-import spare.peetseater.games.screens.LevelScreen;
 import spare.peetseater.games.screens.Scene;
 import spare.peetseater.games.screens.ScreenSignal;
 
 public class InitialLoadingScreen implements Scene {
     private final BitmapFont bitmapFont;
-    private final BustOutRun game;
+    private final GameRunner game;
     private float elapsedSeconds;
     private int pulse;
 
-    public InitialLoadingScreen(BustOutRun game) {
+    public InitialLoadingScreen(GameRunner game) {
         this.bitmapFont = new BitmapFont(false);
         this.game = game;
         this.game.assetManager.load(GameAssets.INITIAL_LOADING_SCREEN_BUNDLE);

@@ -5,14 +5,14 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
-import spare.peetseater.games.BustOutRun;
+import spare.peetseater.games.GameRunner;
 import spare.peetseater.games.GameAssets;
 import spare.peetseater.games.utilities.SceneAssetBundle;
 
 public class LevelScreen implements Scene {
-    private final BustOutRun game;
+    private final GameRunner game;
 
-    public LevelScreen(BustOutRun game) {
+    public LevelScreen(GameRunner game) {
         this.game = game;
         game.assetManager.load(GameAssets.LEVEL_SCREEN_BUNDLE);
     }

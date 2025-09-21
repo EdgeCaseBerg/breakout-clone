@@ -18,7 +18,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
-public class BustOutRun implements ApplicationListener {
+public class GameRunner implements ApplicationListener {
 
     public SpriteBatch batch;
     public AssetManager assetManager;

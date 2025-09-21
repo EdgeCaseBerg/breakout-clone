@@ -1,6 +1,6 @@
 package spare.peetseater.games.screens;
 
-import spare.peetseater.games.BustOutRun;
+import spare.peetseater.games.GameRunner;
 
 public enum ScreenSignal {
     /** Signal to the game runner that a queued scene should be loaded
@@ -11,7 +11,7 @@ public enum ScreenSignal {
     OVERLAY_SCENE,
     /** Signal to the game runner to unload the current scene and display the next in queue
      * It is the responsibility of the current scene to ensure that there is a queued scene
-     * to be transitioned to. Use {@link BustOutRun}'s requestSceneChangeTo method to do so.
+     * to be transitioned to. Use {@link GameRunner}'s requestSceneChangeTo method to do so.
      * */
     UNLOAD,
     /** Continue rendering the current scene */

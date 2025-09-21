@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
-import spare.peetseater.games.BustOutRun;
+import spare.peetseater.games.GameRunner;
 import spare.peetseater.games.GameAssets;
 import spare.peetseater.games.screens.Scene;
 import spare.peetseater.games.screens.ScreenSignal;
@@ -13,12 +13,12 @@ import spare.peetseater.games.utilities.DelayedScreenshot;
 import spare.peetseater.games.utilities.SceneAssetBundle;
 
 public class FadeOut implements Scene {
-    private final BustOutRun game;
+    private final GameRunner game;
     private final float forSeconds;
     private float accum = 0f;
     private final DelayedScreenshot screenshot;
 
-    public FadeOut(BustOutRun game, float seconds, DelayedScreenshot priorScreenSnapshot) {
+    public FadeOut(GameRunner game, float seconds, DelayedScreenshot priorScreenSnapshot) {
         this.game = game;
         this.forSeconds = seconds;
         this.screenshot = priorScreenSnapshot;
