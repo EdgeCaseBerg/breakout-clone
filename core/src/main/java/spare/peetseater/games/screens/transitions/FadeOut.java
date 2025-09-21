@@ -13,7 +13,7 @@ import spare.peetseater.games.screens.Scene;
 import spare.peetseater.games.screens.ScreenSignal;
 import spare.peetseater.games.utilities.SceneAssetBundle;
 
-public class FadeOut extends ScreenAdapter implements Scene {
+public class FadeOut implements Scene {
     private final BustOutRun game;
     private final float forSeconds;
     private float accum = 0f;
@@ -29,11 +29,6 @@ public class FadeOut extends ScreenAdapter implements Scene {
     @Override
     public String getBundleName() {
         return GameAssets.FADE_OUT_BUNDLE.fileName;
-    }
-
-    @Override
-    public Screen getScreen() {
-        return this;
     }
 
     @Override
@@ -76,7 +71,7 @@ public class FadeOut extends ScreenAdapter implements Scene {
 
     @Override
     public void dispose() {
-        super.dispose();
+        this.game.assetManager.unload(getBundleName());
         this.from.dispose();
     }
 }

@@ -1,8 +1,6 @@
 package spare.peetseater.games;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -13,7 +11,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import spare.peetseater.games.screens.Scene;
 import spare.peetseater.games.screens.ScreenSignal;
 
-public class InitialLoadingScreen extends ScreenAdapter implements Scene {
+public class InitialLoadingScreen implements Scene {
     private final AssetManager assetManager;
     private final SpriteBatch batch;
     private final BitmapFont bitmapFont;
@@ -62,33 +60,8 @@ public class InitialLoadingScreen extends ScreenAdapter implements Scene {
     }
 
     @Override
-    public void resize(int width, int height) {
-        if(width <= 0 || height <= 0) return;
-        // we dont need to resize because the loading screen isn't using a camera.
-    }
-
-    @Override
-    public void pause() {
-        elapsedSeconds = 0;
-    }
-
-    @Override
-    public void resume() {
-        elapsedSeconds = 0;
-    }
-
-    @Override
-    public void hide() {
-        elapsedSeconds = 0;
-    }
-
-    @Override
     public String getBundleName() {
         return GameAssets.INITIAL_LOADING_SCREEN_BUNDLE_KEY;
     }
 
-    @Override
-    public Screen getScreen() {
-        return this;
-    }
 }

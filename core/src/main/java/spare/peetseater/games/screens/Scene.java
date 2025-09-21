@@ -4,7 +4,7 @@ import com.badlogic.gdx.Screen;
 
 public interface Scene {
     public String getBundleName();
-    public Screen getScreen();
     public ScreenSignal update(float seconds);
     public void render(float delta);
+    public void dispose();
 }

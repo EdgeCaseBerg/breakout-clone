@@ -1,8 +1,6 @@
 package spare.peetseater.games;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -20,7 +18,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
-public class BustOutRun extends Game {
+public class BustOutRun implements ApplicationListener {
 
     public SpriteBatch batch;
     public AssetManager assetManager;
@@ -44,17 +42,22 @@ public class BustOutRun extends Game {
         toLoad = new ConcurrentLinkedQueue<>();
         Scene loadingScreen = new InitialLoadingScreen(this);
         currentScreen = loadingScreen;
-        setScreen(loadingScreen.getScreen());
         requestSceneChangeTo(new LevelScreen(this));
     }
 
     @Override
+    public void resize(int width, int height) {
+        // If the window is minimized on a desktop (LWJGL3) platform, width and height are 0, which causes problems.
+        // In that case, we don't resize anything, and wait for the window to be a normal size before updating.
+        if(width <= 0 || height <= 0) return;
+    }
+
+    @Override
     public void dispose() {
-        super.dispose();
         while(!toLoad.isEmpty()) {
-            toLoad.poll().getScreen().dispose();
+            toLoad.poll().dispose();
         }
-        currentScreen.getScreen().dispose();
+        currentScreen.dispose();
         assetManager.dispose();
     }
 
@@ -86,6 +89,16 @@ public class BustOutRun extends Game {
         batch.end();
     }
 
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
     private void unloadScene() {
         if (toLoad.isEmpty()) {
             Gdx.app.log("SCENES", "asked to unload current scene but there is no scene to return to");
@@ -93,10 +106,8 @@ public class BustOutRun extends Game {
         }
         Scene nextScene = toLoad.peek();
         if (assetManager.isLoaded(nextScene.getBundleName())) {
-            assetManager.unload(currentScreen.getBundleName());
-            currentScreen.getScreen().dispose();
+            currentScreen.dispose();
             currentScreen = toLoad.poll();
-            setScreen(currentScreen.getScreen());
         } else {
             assetManager.update(17);
             currentScreen.render(Gdx.graphics.getDeltaTime());
@@ -116,7 +127,6 @@ public class BustOutRun extends Game {
             // we can return to it when the next screen signals UNLOAD
             toLoad.add(currentScreen);
             currentScreen = toLoad.poll();
-            setScreen(currentScreen.getScreen());
         } else {
             assetManager.update(17);
             currentScreen.render(Gdx.graphics.getDeltaTime());
