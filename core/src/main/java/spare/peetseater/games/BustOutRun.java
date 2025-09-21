@@ -2,7 +2,6 @@ package spare.peetseater.games;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,6 +12,7 @@ import spare.peetseater.games.screens.LevelScreen;
 import spare.peetseater.games.screens.Scene;
 import spare.peetseater.games.screens.ScreenSignal;
 import spare.peetseater.games.screens.transitions.FadeOut;
+import spare.peetseater.games.utilities.DelayedScreenshot;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -40,8 +40,7 @@ public class BustOutRun implements ApplicationListener {
         viewport.setCamera(camera);
 
         toLoad = new ConcurrentLinkedQueue<>();
-        Scene loadingScreen = new InitialLoadingScreen(this);
-        currentScreen = loadingScreen;
+        currentScreen = new InitialLoadingScreen(this);;
         requestSceneChangeTo(new LevelScreen(this));
     }
 
@@ -89,15 +88,6 @@ public class BustOutRun implements ApplicationListener {
         batch.end();
     }
 
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
 
     private void unloadScene() {
         if (toLoad.isEmpty()) {
@@ -125,8 +115,8 @@ public class BustOutRun implements ApplicationListener {
         if (assetManager.isLoaded(nextScene.getBundleName())) {
             // Place the scene we're coming from onto the queue so
             // we can return to it when the next screen signals UNLOAD
-            toLoad.add(currentScreen);
-            currentScreen = toLoad.poll();
+            toLoad.add(currentScreen);     // add to tail
+            currentScreen = toLoad.poll(); // pull from head
         } else {
             assetManager.update(17);
             currentScreen.render(Gdx.graphics.getDeltaTime());
@@ -137,7 +127,7 @@ public class BustOutRun implements ApplicationListener {
         // When we do screen transitions, this is where we can
         // queue up a FadeOut, Load, FadeIn, Desired Scene, list
         // of values once we make those.
-        toLoad.add(new FadeOut(this, 2f, screenshot()));
+        toLoad.add(new FadeOut(this, 2f, new DelayedScreenshot(batch, currentScreen) ));
         toLoad.add(scene);
     }
 
@@ -155,5 +145,14 @@ public class BustOutRun implements ApplicationListener {
         batch.end();
         frameBuffer.end();
         return frameBuffer.getColorBufferTexture();
+    }
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
     }
 }

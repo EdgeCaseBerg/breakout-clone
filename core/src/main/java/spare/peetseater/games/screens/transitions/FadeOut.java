@@ -1,8 +1,6 @@
 package spare.peetseater.games.screens.transitions;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
@@ -11,18 +9,19 @@ import spare.peetseater.games.BustOutRun;
 import spare.peetseater.games.GameAssets;
 import spare.peetseater.games.screens.Scene;
 import spare.peetseater.games.screens.ScreenSignal;
+import spare.peetseater.games.utilities.DelayedScreenshot;
 import spare.peetseater.games.utilities.SceneAssetBundle;
 
 public class FadeOut implements Scene {
     private final BustOutRun game;
     private final float forSeconds;
     private float accum = 0f;
-    private final Texture from;
+    private final DelayedScreenshot screenshot;
 
-    public FadeOut(BustOutRun game, float seconds, Texture priorScreenSnapshot) {
+    public FadeOut(BustOutRun game, float seconds, DelayedScreenshot priorScreenSnapshot) {
         this.game = game;
         this.forSeconds = seconds;
-        this.from = priorScreenSnapshot;
+        this.screenshot = priorScreenSnapshot;
         this.game.assetManager.load(GameAssets.FADE_OUT_BUNDLE);
     }
 
@@ -48,6 +47,7 @@ public class FadeOut implements Scene {
         float alpha = Math.min(accum / forSeconds, forSeconds);
         SceneAssetBundle bundle = game.assetManager.get(getBundleName());
         ScreenUtils.clear(Color.BLACK);
+        Texture from = screenshot.screenshot();
         game.batch.draw(
             from,
             0f, 0f,
@@ -72,6 +72,6 @@ public class FadeOut implements Scene {
     @Override
     public void dispose() {
         this.game.assetManager.unload(getBundleName());
-        this.from.dispose();
+        this.screenshot.dispose();
     }
 }
