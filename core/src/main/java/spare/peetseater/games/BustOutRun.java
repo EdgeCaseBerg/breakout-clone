@@ -4,10 +4,13 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import spare.peetseater.games.screens.LevelScreen;
 import spare.peetseater.games.screens.Scene;
 import spare.peetseater.games.screens.ScreenSignal;
@@ -21,17 +24,25 @@ public class BustOutRun extends Game {
 
     public SpriteBatch batch;
     public AssetManager assetManager;
-    public Scene loadingScreen;
-    public Scene currentScreen;
     private Queue<Scene> toLoad;
+    private FitViewport viewport;
+    private OrthographicCamera camera;
+
+    public Scene currentScreen;
 
     @Override
     public void create() {
-        toLoad = new ConcurrentLinkedQueue<>();
         assetManager = new AssetManager();
         GameAssets.configure(assetManager);
+
         batch = new SpriteBatch();
-        loadingScreen = new InitialLoadingScreen(this);
+        camera = new OrthographicCamera(1280f, 800f);
+        camera.setToOrtho(false, 1280f, 800f);
+        viewport = new FitViewport(1280f, 800f);
+        viewport.setCamera(camera);
+
+        toLoad = new ConcurrentLinkedQueue<>();
+        Scene loadingScreen = new InitialLoadingScreen(this);
         currentScreen = loadingScreen;
         setScreen(loadingScreen.getScreen());
         requestSceneChangeTo(new LevelScreen(this));
@@ -40,7 +51,9 @@ public class BustOutRun extends Game {
     @Override
     public void dispose() {
         super.dispose();
-        loadingScreen.getScreen().dispose();
+        while(!toLoad.isEmpty()) {
+            toLoad.poll().getScreen().dispose();
+        }
         currentScreen.getScreen().dispose();
         assetManager.dispose();
     }
@@ -52,14 +65,11 @@ public class BustOutRun extends Game {
             return;
         }
 
-        if (!assetManager.isFinished()) {
-            if (!getScreen().equals(loadingScreen.getScreen())) {
-                setScreen(loadingScreen.getScreen());
-            }
-        }
-
         float delta = Gdx.graphics.getDeltaTime();
         ScreenSignal signal = currentScreen.update(delta);
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
         switch (signal) {
             case OVERLAY_SCENE:
                 Gdx.app.log(getClass().getSimpleName(), "OVERLAY");
@@ -71,9 +81,9 @@ public class BustOutRun extends Game {
                 break;
             case CONTINUE:
             default:
-                if (screen != null) screen.render(Gdx.graphics.getDeltaTime());
+                currentScreen.render(delta);
         }
-
+        batch.end();
     }
 
     private void unloadScene() {
@@ -83,17 +93,13 @@ public class BustOutRun extends Game {
         }
         Scene nextScene = toLoad.peek();
         if (assetManager.isLoaded(nextScene.getBundleName())) {
-            if (loadingScreen != currentScreen) {
-                assetManager.unload(currentScreen.getBundleName());
-                currentScreen.getScreen().dispose();
-            }
+            assetManager.unload(currentScreen.getBundleName());
+            currentScreen.getScreen().dispose();
             currentScreen = toLoad.poll();
             setScreen(currentScreen.getScreen());
         } else {
-            currentScreen = loadingScreen;
-            if (!getScreen().equals(loadingScreen.getScreen())) {
-                setScreen(loadingScreen.getScreen());
-            }
+            assetManager.update(17);
+            currentScreen.render(Gdx.graphics.getDeltaTime());
         }
     }
 
@@ -112,10 +118,8 @@ public class BustOutRun extends Game {
             currentScreen = toLoad.poll();
             setScreen(currentScreen.getScreen());
         } else {
-            currentScreen = loadingScreen;
-            if (!getScreen().equals(loadingScreen.getScreen())) {
-                setScreen(loadingScreen.getScreen());
-            }
+            assetManager.update(17);
+            currentScreen.render(Gdx.graphics.getDeltaTime());
         }
     }
 
@@ -130,15 +134,16 @@ public class BustOutRun extends Game {
     private Texture screenshot() {
         FrameBuffer frameBuffer = new FrameBuffer(
             Pixmap.Format.RGBA8888,
-            Gdx.graphics.getWidth(),
-            Gdx.graphics.getHeight(),
+            1280,
+            800,
             false
         );
-        batch.flush();;
+        batch.flush();
         frameBuffer.begin();
-        currentScreen.getScreen().render(0);
+        batch.begin();
+        currentScreen.render(0);
+        batch.end();
         frameBuffer.end();
-        Texture screenshot = frameBuffer.getColorBufferTexture();
-        return screenshot;
+        return frameBuffer.getColorBufferTexture();
     }
 }

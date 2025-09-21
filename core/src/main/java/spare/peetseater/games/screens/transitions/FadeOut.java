@@ -42,7 +42,6 @@ public class FadeOut extends ScreenAdapter implements Scene {
         // for what we intend to load to in order to minimize wait time.
         game.assetManager.update(17);
         this.accum += seconds;
-        Gdx.app.log("RENDER", this.accum + "");
         if (accum > forSeconds) {
             return ScreenSignal.UNLOAD;
         }
@@ -53,32 +52,26 @@ public class FadeOut extends ScreenAdapter implements Scene {
     public void render(float delta) {
         float alpha = Math.min(accum / forSeconds, forSeconds);
         SceneAssetBundle bundle = game.assetManager.get(getBundleName());
-        Gdx.app.log("RENDER", alpha + "");
         ScreenUtils.clear(Color.BLACK);
-        game.batch.begin();
         game.batch.draw(
             from,
             0f, 0f,
             Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
             0, 0,
-            Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
+            from.getWidth(), from.getHeight(),
             false,
-            true // frame buffer snapshtos are upside down so flipY=true
+            true // frame buffer screenshots are upside down so flipY=true
         );
         Color batchColor = game.batch.getColor().cpy();
-        game.batch.setColor(
-            batchColor.r,
-            batchColor.g,
-            batchColor.b,
-            MathUtils.lerp(0, 1, alpha)
-        );
+        Color alphaColor = batchColor.cpy();
+        alphaColor.a = MathUtils.lerp(0, 1, alpha);
+        game.batch.setColor(alphaColor);
         game.batch.draw(
             bundle.get(GameAssets.BLACK_SQUARE),
             0,0,
             Gdx.graphics.getWidth(), Gdx.graphics.getHeight()
         );
-        game.batch.setColor(batchColor.r, batchColor.g, batchColor.b, 1);
-        game.batch.end();
+        game.batch.setColor(batchColor);
     }
 
     @Override

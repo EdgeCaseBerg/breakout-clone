@@ -44,13 +44,10 @@ public class InitialLoadingScreen extends ScreenAdapter implements Scene {
     public void render(float delta) {
         float alpha = MathUtils.lerp(0, 100, elapsedSeconds);
         int loaded = (int)(assetManager.getProgress() * 100);
-        Color color = new Color(0,1,0,alpha/100f);
         ScreenUtils.clear(Color.GRAY);
-        batch.begin();
-        batch.enableBlending();
-        bitmapFont.setColor(color);
+        Color fontcolor = new Color(0,1,0,alpha/100f);
+        bitmapFont.setColor(fontcolor);
         bitmapFont.draw(batch, String.format("Loading %d%%", loaded), 0, Gdx.graphics.getHeight()/2f, Gdx.graphics.getWidth(), Align.center, false);
-        batch.end();
         elapsedSeconds += delta * pulse;
         if (elapsedSeconds > 1) {
             pulse = -1;

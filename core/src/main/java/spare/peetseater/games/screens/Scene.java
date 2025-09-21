@@ -6,4 +6,5 @@ public interface Scene {
     public String getBundleName();
     public Screen getScreen();
     public ScreenSignal update(float seconds);
+    public void render(float delta);
 }
