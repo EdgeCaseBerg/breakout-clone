@@ -1,5 +1,7 @@
 package spare.peetseater.games.screens;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Camera;
@@ -49,5 +51,13 @@ public class LevelScreen extends ScreenAdapter implements Scene {
     @Override
     public Screen getScreen() {
         return this;
+    }
+
+    @Override
+    public ScreenSignal update(float seconds) {
+        if (Gdx.input.isButtonJustPressed(Input.Keys.ENTER)) {
+            game.requestSceneChangeTo(new LevelScreen(game));
+        }
+        return ScreenSignal.CONTINUE;
     }
 }

@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import spare.peetseater.games.screens.Scene;
+import spare.peetseater.games.screens.ScreenSignal;
 
 public class InitialLoadingScreen implements Screen, Scene {
     private final AssetManager assetManager;
@@ -30,7 +31,6 @@ public class InitialLoadingScreen implements Screen, Scene {
 
     @Override
     public void render(float delta) {
-        assetManager.update(17);
         float alpha = MathUtils.lerp(0, 100, elapsedSeconds);
         int loaded = (int)(assetManager.getProgress() * 100);
         Color color = new Color(0,1,0,alpha/100f);
@@ -87,5 +87,16 @@ public class InitialLoadingScreen implements Screen, Scene {
     @Override
     public Screen getScreen() {
         return this;
+    }
+
+    @Override
+    public ScreenSignal update(float seconds) {
+        // unless we want to display the loading screen for a while, always return load next
+        // to find out if we can shift an item off the queue
+        if (assetManager.update(17)) {
+            return ScreenSignal.OVERLAY_SCENE;
+        } else {
+            return ScreenSignal.CONTINUE;
+        }
     }
 }
