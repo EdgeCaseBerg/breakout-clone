@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import spare.peetseater.games.screens.LevelScreen;
 import spare.peetseater.games.screens.Scene;
 import spare.peetseater.games.screens.ScreenSignal;
+import spare.peetseater.games.screens.transitions.FadeIn;
 import spare.peetseater.games.screens.transitions.FadeOut;
 import spare.peetseater.games.screens.transitions.LoadingScreen;
 import spare.peetseater.games.utilities.DelayedScreenshot;
@@ -124,6 +125,7 @@ public class GameRunner implements ApplicationListener {
     private void requestInitialLoadTo(Scene scene) {
         // Initial load must use a delayed screenshot in order to capture the 100% properly.
         toLoad.add(new FadeOut(this, 2f, new DelayedScreenshot(batch, currentScreen)));
+        toLoad.add(new FadeIn(this, 1, scene));
         toLoad.add(scene);
     }
 
@@ -134,8 +136,10 @@ public class GameRunner implements ApplicationListener {
         DelayedScreenshot screenshot = new DelayedScreenshot(batch, currentScreen);
         // Take the screenshot while the current scene's assets are loaded.
         screenshot.screenshot();
-        toLoad.add(new FadeOut(this, 2f, screenshot));
-        toLoad.add(new LoadingScreen(this));
+        LoadingScreen loadingScreen = new LoadingScreen(this);
+        toLoad.add(new FadeOut(this, 2f, new DelayedScreenshot(batch, loadingScreen)));
+        toLoad.add(loadingScreen);
+        toLoad.add(new FadeIn(this, 1f, scene));
         toLoad.add(scene);
     }
 
