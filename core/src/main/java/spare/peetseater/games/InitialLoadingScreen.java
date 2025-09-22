@@ -28,7 +28,7 @@ public class InitialLoadingScreen implements Scene {
         // unless we want to display the loading screen for a while, always return load next
         // to find out if we can shift an item off the queue
         if (this.game.assetManager.update(17)) {
-            return ScreenSignal.OVERLAY_SCENE;
+            return ScreenSignal.UNLOAD;
         } else {
             return ScreenSignal.CONTINUE;
         }
