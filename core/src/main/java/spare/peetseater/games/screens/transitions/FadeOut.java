@@ -35,8 +35,8 @@ public class FadeOut implements Scene {
         // As we fade out, ensure that the asset manager is loading anything
         // for what we intend to load to in order to minimize wait time.
         game.assetManager.update(17);
-        this.accum += seconds;
-        if (accum > forSeconds) {
+        this.accum = Math.min(this.accum + seconds, forSeconds);
+        if (accum >= forSeconds) {
             return ScreenSignal.UNLOAD;
         }
         return ScreenSignal.CONTINUE;
