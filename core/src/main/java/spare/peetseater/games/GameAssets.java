@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import spare.peetseater.games.screens.LevelScreenBundleParams;
 import spare.peetseater.games.screens.transitions.FadeOutBundleParams;
+import spare.peetseater.games.screens.transitions.LoadingScreenBundleParams;
 import spare.peetseater.games.utilities.SceneAssetBundle;
 import spare.peetseater.games.utilities.SceneAssetBundleLoader;
 import spare.peetseater.games.utilities.TemporaryTexture;
@@ -27,8 +28,14 @@ public class GameAssets {
     public static final AssetDescriptor<SceneAssetBundle> INITIAL_LOADING_SCREEN_BUNDLE = new AssetDescriptor<>(INITIAL_LOADING_SCREEN_BUNDLE_KEY, SceneAssetBundle.class, new SceneAssetBundleLoader.SceneAssetBundleParam());
 
     public static final AssetDescriptor<TemporaryTexture> BLACK_SQUARE = new AssetDescriptor<>("blacksquare", TemporaryTexture.class, new TemporaryTextureLoader.TemporaryTextureParam(Color.BLACK));
+    public static final AssetDescriptor<TemporaryTexture> RED_SQUARE = new AssetDescriptor<>("redsquare", TemporaryTexture.class, new TemporaryTextureLoader.TemporaryTextureParam(Color.RED));
+    public static final AssetDescriptor<TemporaryTexture> YELLOW_SQUARE = new AssetDescriptor<>("yellowsquare", TemporaryTexture.class, new TemporaryTextureLoader.TemporaryTextureParam(Color.YELLOW));
+    public static final AssetDescriptor<TemporaryTexture> GREEN_SQUARE = new AssetDescriptor<>("greensquare", TemporaryTexture.class, new TemporaryTextureLoader.TemporaryTextureParam(Color.GREEN));
 
     public static final String FADE_OUT_SCREEN_KEY = "fadeout.bundle";
     public static final AssetDescriptor<SceneAssetBundle> FADE_OUT_BUNDLE = new AssetDescriptor<>(FADE_OUT_SCREEN_KEY, SceneAssetBundle.class, new FadeOutBundleParams());
+
+    public static final String LOADING_SCREEN_BUNDLE_KEY = "loadingscreen.bundle";
+    public static final AssetDescriptor<SceneAssetBundle> LOADING_SCREEN_BUNDLE = new AssetDescriptor<>(LOADING_SCREEN_BUNDLE_KEY, SceneAssetBundle.class, new LoadingScreenBundleParams());
 
 }
