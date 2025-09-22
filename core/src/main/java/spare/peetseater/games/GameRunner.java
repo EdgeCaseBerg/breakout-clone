@@ -9,6 +9,7 @@ import spare.peetseater.games.screens.LevelScreen;
 import spare.peetseater.games.screens.Scene;
 import spare.peetseater.games.screens.ScreenSignal;
 import spare.peetseater.games.screens.transitions.FadeOut;
+import spare.peetseater.games.screens.transitions.LoadingScreen;
 import spare.peetseater.games.utilities.DelayedScreenshot;
 
 import java.util.Queue;
@@ -134,6 +135,7 @@ public class GameRunner implements ApplicationListener {
         // Take the screenshot while the current scene's assets are loaded.
         screenshot.screenshot();
         toLoad.add(new FadeOut(this, 2f, screenshot));
+        toLoad.add(new LoadingScreen(this));
         toLoad.add(scene);
     }
 
