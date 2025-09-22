@@ -61,7 +61,7 @@ public class LoadingScreen implements Scene {
                 30, 30
             );
         }
-        if (elapsedSeconds > 1.5) {
+        if (elapsedSeconds > minLength) {
             shownOnce = true;
             elapsedSeconds = 0;
         }
