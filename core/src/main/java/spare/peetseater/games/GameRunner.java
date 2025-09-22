@@ -136,9 +136,10 @@ public class GameRunner implements ApplicationListener {
         DelayedScreenshot screenshot = new DelayedScreenshot(batch, currentScreen);
         // Take the screenshot while the current scene's assets are loaded.
         screenshot.screenshot();
+        toLoad.add(new FadeOut(this, 1f, screenshot));
         LoadingScreen loadingScreen = new LoadingScreen(this);
-        toLoad.add(new FadeOut(this, 2f, new DelayedScreenshot(batch, loadingScreen)));
         toLoad.add(loadingScreen);
+        toLoad.add(new FadeOut(this, 1f, new DelayedScreenshot(batch, loadingScreen)));
         toLoad.add(new FadeIn(this, 1f, scene));
         toLoad.add(scene);
     }

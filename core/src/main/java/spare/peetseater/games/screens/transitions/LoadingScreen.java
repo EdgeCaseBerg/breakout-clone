@@ -40,21 +40,21 @@ public class LoadingScreen implements Scene {
         SceneAssetBundle bundle = game.assetManager.get(GameAssets.LOADING_SCREEN_BUNDLE);
         elapsedSeconds += delta;
         ScreenUtils.clear(Color.BLACK);
-        if (elapsedSeconds > 0.1) {
-            game.batch.draw(
-                bundle.get(GameAssets.RED_SQUARE),
-                1280f / 2 - 60, 400,
-                30, 30
-            );
-        }
-        if (elapsedSeconds > 0.4) {
+
+        game.batch.draw(
+            bundle.get(GameAssets.RED_SQUARE),
+            1280f / 2 - 60, 400,
+            30, 30
+        );
+
+        if (elapsedSeconds > 0.4 || elapsedSeconds == 0) {
             game.batch.draw(
                 bundle.get(GameAssets.YELLOW_SQUARE),
                 1280f / 2f - 15, 400,
                 30, 30
             );
         }
-        if (elapsedSeconds > 0.8) {
+        if (elapsedSeconds > 0.8 || elapsedSeconds == 0) {
             game.batch.draw(
                 bundle.get(GameAssets.GREEN_SQUARE),
                 1280f / 2f + 30, 400,
