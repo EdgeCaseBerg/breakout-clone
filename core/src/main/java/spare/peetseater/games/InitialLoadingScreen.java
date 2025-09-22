@@ -38,7 +38,7 @@ public class InitialLoadingScreen implements Scene {
     public void render(float delta) {
         float alpha = MathUtils.lerp(0, 100, elapsedSeconds);
         int loaded = (int)(this.game.assetManager.getProgress() * 100);
-        ScreenUtils.clear(Color.GRAY);
+        ScreenUtils.clear(Color.BLACK);
         Color fontcolor = new Color(0,1,0,alpha/100f);
         bitmapFont.setColor(fontcolor);
         bitmapFont.draw(this.game.batch, String.format("Loading %d%%", loaded), 0, Gdx.graphics.getHeight()/2f, Gdx.graphics.getWidth(), Align.center, false);

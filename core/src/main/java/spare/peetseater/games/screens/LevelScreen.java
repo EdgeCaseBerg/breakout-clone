@@ -19,7 +19,7 @@ public class LevelScreen implements Scene {
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(Color.YELLOW);
+        ScreenUtils.clear(Color.BLACK);
         SceneAssetBundle bundle = game.assetManager.get(GameAssets.LEVEL_SCREEN_BUNDLE);
         Texture texture = bundle.get(GameAssets.PLAYER_PADDLE);
         game.batch.draw(
