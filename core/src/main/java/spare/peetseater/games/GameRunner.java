@@ -73,11 +73,11 @@ public class GameRunner implements ApplicationListener {
         batch.begin();
         switch (signal) {
             case OVERLAY_SCENE:
-                Gdx.app.log(getClass().getSimpleName(), "OVERLAY");
+                Gdx.app.log(getClass().getSimpleName(), "OVERLAY: " + currentScreen.getClass().getSimpleName());
                 overlayScene();
                 break;
             case UNLOAD:
-                Gdx.app.log(getClass().getSimpleName(), "UNLOAD");
+                Gdx.app.log(getClass().getSimpleName(), "UNLOAD: " + currentScreen.getClass().getSimpleName());
                 unloadScene();
                 break;
             case CONTINUE:
