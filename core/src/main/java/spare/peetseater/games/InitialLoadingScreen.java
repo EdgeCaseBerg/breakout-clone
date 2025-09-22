@@ -53,6 +53,7 @@ public class InitialLoadingScreen implements Scene {
     @Override
     public void dispose() {
         this.bitmapFont.dispose();
+        this.game.assetManager.unload(getBundleName());
     }
 
     @Override
