@@ -41,6 +41,6 @@ public class DelayedScreenshot {
     }
 
     public void dispose() {
-        screenshot.dispose();
+        if (screenshot != null) screenshot.dispose();
     }
 }
