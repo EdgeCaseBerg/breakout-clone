@@ -28,14 +28,14 @@ public class DelayedScreenshot {
             800,
             false
         );
-        batch.end();
+        boolean batchWasDrawing = batch.isDrawing();
+        if (batchWasDrawing) batch.end();
         frameBuffer.begin();
         batch.begin();
         scene.render(0);
         batch.end();
         frameBuffer.end();
-        batch.begin();
-
+        if (batchWasDrawing) batch.begin();
         screenshot = frameBuffer.getColorBufferTexture();
         return screenshot;
     }
