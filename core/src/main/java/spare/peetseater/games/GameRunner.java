@@ -38,7 +38,7 @@ public class GameRunner implements ApplicationListener {
 
         toLoad = new ConcurrentLinkedQueue<>();
         currentScreen = new InitialLoadingScreen(this);;
-        requestSceneChangeTo(new LevelScreen(this));
+        requestInitialLoadTo(new LevelScreen(this));
     }
 
     @Override
@@ -120,11 +120,20 @@ public class GameRunner implements ApplicationListener {
         }
     }
 
+    private void requestInitialLoadTo(Scene scene) {
+        // Initial load must use a delayed screenshot in order to capture the 100% properly.
+        toLoad.add(new FadeOut(this, 2f, new DelayedScreenshot(batch, currentScreen)));
+        toLoad.add(scene);
+    }
+
     public void requestSceneChangeTo(Scene scene) {
         // When we do screen transitions, this is where we can
         // queue up a FadeOut, Load, FadeIn, Desired Scene, list
         // of values once we make those.
-        toLoad.add(new FadeOut(this, 2f, new DelayedScreenshot(batch, currentScreen) ));
+        DelayedScreenshot screenshot = new DelayedScreenshot(batch, currentScreen);
+        // Take the screenshot while the current scene's assets are loaded.
+        screenshot.screenshot();
+        toLoad.add(new FadeOut(this, 2f, screenshot));
         toLoad.add(scene);
     }
 
