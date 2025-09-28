@@ -14,7 +14,7 @@ public class Ball {
         this.dimensions = new Vector2(10, 10);
     }
 
-    public boolean willIntersect(Vector2 point, float time) {
+    public boolean willIntersect(Obstacle obstacle, float time) {
         return false;
     }
 
