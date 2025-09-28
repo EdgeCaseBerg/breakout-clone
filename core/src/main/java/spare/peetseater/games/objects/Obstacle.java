@@ -12,14 +12,43 @@ public class Obstacle {
         this.dimensions = dimensions.cpy();
     }
 
+    /** It is assumed that intersection has been computed if we are using this */
     public float getBounceAngle(Ball ball) {
         // use center point for bounce determination!
-        float xTouchPoint = ball.getPosition().x + ball.getDimensions().x/2f;
-        float normalizedX = Math.max(0, xTouchPoint - position.x); // this shouldn't go negative, but just in case.
+        float bx = ball.getPosition().x + ball.getDimensions().x/2f;
+        float by = ball.getPosition().y + ball.getDimensions().y/2f;
 
-        float leftAngle = MathUtils.degreesToRadians * (180 - 15);
-        float rightAngle = MathUtils.degreesToRadians * (0 + 15);
-        return MathUtils.lerpAngle(leftAngle, rightAngle, normalizedX / ball.getDimensions().y);
+        float ox = position.x + dimensions.x /2f;
+        float oy = position.y + dimensions.y /2f;
+
+        boolean ballToTheLeft   = bx < ox;
+        boolean ballUnderneath  = by < oy;
+        boolean ballToTheRight = !ballToTheLeft;
+
+        // Off to the quadrant you go
+        float angle1;
+        float angle2;
+        if (ballToTheLeft && ballUnderneath) {
+            // 180 - 270 (but nix the edge, we don't want purely horizontal/vertical movement ever.
+            angle1 = 181;
+            angle2 = 269;
+        } else if (ballToTheLeft) {
+            // 90 - 180
+            angle1 = 91;
+            angle2 = 179;
+        } else if (ballToTheRight && ballUnderneath) {
+            // 270 - 360
+            angle1 = 271;
+            angle2 = 359;
+        } else {
+            // 0 - 90
+            angle1 = 1;
+            angle2 = 89;
+        }
+
+        float radA = MathUtils.degreesToRadians * angle1;
+        float radB = MathUtils.degreesToRadians * angle2;
+        return MathUtils.lerpAngle(radA, radB, MathUtils.random());
     }
 
     public Vector2 getPosition() {
