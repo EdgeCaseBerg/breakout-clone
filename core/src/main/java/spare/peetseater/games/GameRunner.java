@@ -7,25 +7,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import spare.peetseater.games.screens.LevelScreen;
 import spare.peetseater.games.screens.Scene;
-import spare.peetseater.games.screens.ScreenSignal;
-import spare.peetseater.games.screens.transitions.FadeIn;
-import spare.peetseater.games.screens.transitions.FadeOut;
-import spare.peetseater.games.screens.transitions.LoadingScreen;
-import spare.peetseater.games.utilities.DelayedScreenshot;
-
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class GameRunner implements ApplicationListener {
 
+    public static final float GAME_WIDTH = 1280f;
+    public static final float GAME_HEIGHT = 800f;
     public SpriteBatch batch;
     public AssetManager assetManager;
-    private Queue<Scene> toLoad;
+    private Scene loadingScene;
     private FitViewport viewport;
     private OrthographicCamera camera;
-
-    public Scene currentScreen;
+    public Scene currentScene;
 
     @Override
     public void create() {
@@ -33,14 +26,13 @@ public class GameRunner implements ApplicationListener {
         GameAssets.configure(assetManager);
 
         batch = new SpriteBatch();
-        camera = new OrthographicCamera(1280f, 800f);
-        camera.setToOrtho(false, 1280f, 800f);
-        viewport = new FitViewport(1280f, 800f);
+        camera = new OrthographicCamera(GAME_WIDTH, GAME_HEIGHT);
+        camera.setToOrtho(false, GAME_WIDTH, GAME_HEIGHT);
+        viewport = new FitViewport(GAME_WIDTH, GAME_HEIGHT);
         viewport.setCamera(camera);
 
-        toLoad = new ConcurrentLinkedQueue<>();
-        currentScreen = new InitialLoadingScreen(this);;
-        requestInitialLoadTo(new LevelScreen(this));
+        loadingScene = new InitialLoadingScreen(this);
+        currentScene = new LevelScreen(this);;
     }
 
     @Override
@@ -52,10 +44,8 @@ public class GameRunner implements ApplicationListener {
 
     @Override
     public void dispose() {
-        while(!toLoad.isEmpty()) {
-            toLoad.poll().dispose();
-        }
-        currentScreen.dispose();
+        loadingScene.dispose();
+        currentScene.dispose();
         assetManager.dispose();
     }
 
@@ -67,81 +57,19 @@ public class GameRunner implements ApplicationListener {
         }
 
         float delta = Gdx.graphics.getDeltaTime();
-        ScreenSignal signal = currentScreen.update(delta);
+        Scene scene;
+        if (assetManager.isFinished()) {
+            scene = currentScene;
+        } else {
+            scene = loadingScene;
+        }
+
+        scene.update(delta);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        switch (signal) {
-            case OVERLAY_SCENE:
-                Gdx.app.log(getClass().getSimpleName(), "OVERLAY: " + currentScreen.getClass().getSimpleName());
-                overlayScene();
-                break;
-            case UNLOAD:
-                Gdx.app.log(getClass().getSimpleName(), "UNLOAD: " + currentScreen.getClass().getSimpleName());
-                unloadScene();
-                break;
-            case CONTINUE:
-            default:
-                currentScreen.render(delta);
-        }
+        scene.render(delta);
         batch.end();
-    }
-
-
-    private void unloadScene() {
-        if (toLoad.isEmpty()) {
-            Gdx.app.log("SCENES", "asked to unload current scene but there is no scene to return to");
-            throw new RuntimeException("...");
-        }
-        Scene nextScene = toLoad.peek();
-        if (assetManager.isLoaded(nextScene.getBundleName())) {
-            currentScreen.dispose();
-            currentScreen = toLoad.poll();
-        } else {
-            assetManager.update(17);
-            currentScreen.render(Gdx.graphics.getDeltaTime());
-        }
-    }
-
-    private void overlayScene() {
-        if (toLoad.isEmpty()) {
-            String message = "asked to load next scene but there is none queued";
-            Gdx.app.log(getClass().getSimpleName(), message);
-            throw new RuntimeException(message);
-        }
-
-        Scene nextScene = toLoad.peek();
-        if (assetManager.isLoaded(nextScene.getBundleName())) {
-            // Place the scene we're coming from onto the queue so
-            // we can return to it when the next screen signals UNLOAD
-            toLoad.add(currentScreen);     // add to tail
-            currentScreen = toLoad.poll(); // pull from head
-        } else {
-            assetManager.update(17);
-            currentScreen.render(Gdx.graphics.getDeltaTime());
-        }
-    }
-
-    private void requestInitialLoadTo(Scene scene) {
-        // Initial load must use a delayed screenshot in order to capture the 100% properly.
-        toLoad.add(new FadeOut(this, 2f, new DelayedScreenshot(batch, currentScreen)));
-        toLoad.add(new FadeIn(this, 1, scene));
-        toLoad.add(scene);
-    }
-
-    public void requestSceneChangeTo(Scene scene) {
-        // When we do screen transitions, this is where we can
-        // queue up a FadeOut, Load, FadeIn, Desired Scene, list
-        // of values once we make those.
-        DelayedScreenshot screenshot = new DelayedScreenshot(batch, currentScreen);
-        // Take the screenshot while the current scene's assets are loaded.
-        screenshot.screenshot();
-        toLoad.add(new FadeOut(this, 1f, screenshot));
-        LoadingScreen loadingScreen = new LoadingScreen(this);
-        toLoad.add(loadingScreen);
-        toLoad.add(new FadeOut(this, 1f, new DelayedScreenshot(batch, loadingScreen)));
-        toLoad.add(new FadeIn(this, 1f, scene));
-        toLoad.add(scene);
     }
 
     @Override

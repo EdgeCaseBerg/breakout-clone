@@ -14,6 +14,7 @@ public class LevelScreen implements Scene {
 
     public LevelScreen(GameRunner game) {
         this.game = game;
+        Gdx.app.log(getClass().getSimpleName(), "LOAD: " + getBundleName());
         game.assetManager.load(GameAssets.LEVEL_SCREEN_BUNDLE);
     }
 
@@ -34,16 +35,13 @@ public class LevelScreen implements Scene {
     }
 
     @Override
-    public ScreenSignal update(float seconds) {
-        if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
-            game.requestSceneChangeTo(new LevelScreen(game));
-            return ScreenSignal.UNLOAD;
-        }
-        return ScreenSignal.CONTINUE;
+    public void update(float seconds) {
+
     }
 
     @Override
     public void dispose() {
+        Gdx.app.log(getClass().getSimpleName(), "UNLOAD: " + getBundleName());
         game.assetManager.unload(getBundleName());
     }
 }

@@ -5,11 +5,7 @@ import spare.peetseater.games.GameRunner;
 import spare.peetseater.games.screens.Scene;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
-import spare.peetseater.games.screens.ScreenSignal;
 import spare.peetseater.games.utilities.SceneAssetBundle;
 
 public class LoadingScreen implements Scene {
@@ -21,17 +17,16 @@ public class LoadingScreen implements Scene {
 
     public LoadingScreen(GameRunner game) {
         this.game = game;
+        Gdx.app.log(getClass().getSimpleName(), "LOAD: " + getBundleName());
         this.game.assetManager.load(GameAssets.LOADING_SCREEN_BUNDLE);
         this.elapsedSeconds = 0;
         this.minLength = 1;
     }
 
     @Override
-    public ScreenSignal update(float seconds) {
+    public void update(float seconds) {
         if (this.game.assetManager.update(17) && shownOnce) {
-            return ScreenSignal.UNLOAD;
         } else {
-            return ScreenSignal.CONTINUE;
         }
     }
 
@@ -69,6 +64,7 @@ public class LoadingScreen implements Scene {
 
     @Override
     public void dispose() {
+        Gdx.app.log(getClass().getSimpleName(), "UNLOAD: " + getBundleName());
         this.game.assetManager.unload(getBundleName());
     }
 

@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import spare.peetseater.games.GameRunner;
 import spare.peetseater.games.GameAssets;
 import spare.peetseater.games.screens.Scene;
-import spare.peetseater.games.screens.ScreenSignal;
 import spare.peetseater.games.utilities.DelayedScreenshot;
 import spare.peetseater.games.utilities.SceneAssetBundle;
 
@@ -22,6 +21,7 @@ public class FadeOut implements Scene {
         this.game = game;
         this.forSeconds = seconds;
         this.screenshot = priorScreenSnapshot;
+        Gdx.app.log(getClass().getSimpleName(), "LOAD: " + getBundleName());
         this.game.assetManager.load(GameAssets.FADE_OUT_BUNDLE);
     }
 
@@ -31,15 +31,11 @@ public class FadeOut implements Scene {
     }
 
     @Override
-    public ScreenSignal update(float seconds) {
+    public void update(float seconds) {
         // As we fade out, ensure that the asset manager is loading anything
         // for what we intend to load to in order to minimize wait time.
         game.assetManager.update(17);
         this.accum = Math.min(this.accum + seconds, forSeconds);
-        if (accum >= forSeconds) {
-            return ScreenSignal.UNLOAD;
-        }
-        return ScreenSignal.CONTINUE;
     }
 
     @Override
@@ -71,6 +67,7 @@ public class FadeOut implements Scene {
 
     @Override
     public void dispose() {
+        Gdx.app.log(getClass().getSimpleName(), "UNLOAD: " + getBundleName());
         this.game.assetManager.unload(getBundleName());
         this.screenshot.dispose();
     }

@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import spare.peetseater.games.screens.Scene;
-import spare.peetseater.games.screens.ScreenSignal;
 
 public class InitialLoadingScreen implements Scene {
     private final BitmapFont bitmapFont;
@@ -18,20 +17,15 @@ public class InitialLoadingScreen implements Scene {
     public InitialLoadingScreen(GameRunner game) {
         this.bitmapFont = new BitmapFont(false);
         this.game = game;
+        Gdx.app.log(getClass().getSimpleName(), "LOAD: " + getBundleName());
         this.game.assetManager.load(GameAssets.INITIAL_LOADING_SCREEN_BUNDLE);
         this.elapsedSeconds = 0;
         this.pulse = 1;
     }
 
     @Override
-    public ScreenSignal update(float seconds) {
-        // unless we want to display the loading screen for a while, always return load next
-        // to find out if we can shift an item off the queue
-        if (this.game.assetManager.update(17)) {
-            return ScreenSignal.UNLOAD;
-        } else {
-            return ScreenSignal.CONTINUE;
-        }
+    public void update(float seconds) {
+        this.game.assetManager.update(17);
     }
 
     @Override
@@ -52,6 +46,7 @@ public class InitialLoadingScreen implements Scene {
 
     @Override
     public void dispose() {
+        Gdx.app.log(getClass().getSimpleName(), "UNLOAD: " + getBundleName());
         this.bitmapFont.dispose();
         this.game.assetManager.unload(getBundleName());
     }
