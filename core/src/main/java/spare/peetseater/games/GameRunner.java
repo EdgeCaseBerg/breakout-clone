@@ -44,7 +44,7 @@ public class GameRunner implements ApplicationListener {
 
     @Override
     public void dispose() {
-        loadingScene.dispose();
+        if (loadingScene != currentScene) loadingScene.dispose();
         currentScene.dispose();
         assetManager.dispose();
     }
