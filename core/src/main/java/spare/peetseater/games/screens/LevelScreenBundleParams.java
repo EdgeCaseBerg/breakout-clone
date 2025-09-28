@@ -13,6 +13,9 @@ public class LevelScreenBundleParams extends SceneAssetBundleLoader.SceneAssetBu
     @Override
     public List<AssetDescriptor<?>> getDependencies() {
         this.dependencies.add(GameAssets.PLAYER_PADDLE);
+        this.dependencies.add(GameAssets.GREEN_SQUARE);
+        this.dependencies.add(GameAssets.BLACK_SQUARE);
+        this.dependencies.add(GameAssets.YELLOW_SQUARE);
         return this.dependencies;
     }
 }
