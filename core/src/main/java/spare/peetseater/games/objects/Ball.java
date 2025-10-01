@@ -10,10 +10,14 @@ public class Ball {
     private final Vector2 velocity;
     private Vector2 dimensions;
 
-    public Ball(Vector2 position, Vector2 velocity) {
+    public Ball(Vector2 position, Vector2 velocity, Vector2 dimensions) {
         this.position = position.cpy();
         this.velocity = velocity.cpy();
-        this.dimensions = new Vector2(10, 10);
+        this.dimensions = dimensions.cpy();
+    }
+
+    public Ball(Vector2 position, Vector2 velocity) {
+        this(position, velocity, new Vector2(10, 10));
     }
 
     public Ball projectedAt(float time) {
