@@ -92,17 +92,6 @@ public class Ball {
             float endX = ballStart.x + velocity.x * time;
             float endY = ballStart.y + velocity.y * time;
             Vector2 ballEnd = new Vector2(endX, endY);
-            // What is the slope of this line?
-            float run = endX - ballStart.x;
-            float rise = endY - ballStart.y;
-            if (run == 0.0) {
-                // vertical movement
-                System.err.println("VERT");
-            } else if (rise == 0.0) {
-                // horizontal movement
-                System.err.println("HORZ");
-            }
-
             // Ball XY to End XY is now a line segment that we need to check if it
             // passes through any of the walls of the obstacle.
             boolean intersectsBottom = intersect(ballStart, ballEnd, obstacle.getPosition(), obstacle.getPosition().add(ow, 0));
