@@ -60,6 +60,17 @@ public class Ball {
             return true;
         }
 
+        // If we are moving horizontally or vertically we can extend the box and do a basic intersect.
+        // this will be faster than the counterclosewise check we have to do otherwise.
+        if (velocity.x == 0 || velocity.y == 0) {
+            float x = Math.min(position.x, nextPosition.position.x);
+            float y = Math.min(position.y, nextPosition.position.y);
+            float w = Math.abs(position.x - nextPosition.position.x) + dimensions.x;
+            float h = Math.abs(position.y - nextPosition.position.y) + dimensions.y;
+            Ball spaghettification = new Ball(new Vector2(x, y), Vector2.Zero, new Vector2(w, h));
+            if (spaghettification.intersects(obstacle)) return true;
+        }
+
         // And finally, the hard part. Dealing with overshooting
         // and landing on a position that is no longer intersecting
         // with the obstacle itself.

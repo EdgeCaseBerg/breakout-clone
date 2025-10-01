@@ -100,7 +100,9 @@ class BallTest {
             TestCase.setup(6, 6, 21, 21), // diagonally to the up right
             TestCase.setup(-6, 6, 4, 25), // diagonally to the up left
             TestCase.setup(6, -6, 22, 7), // diagonally to the down right
-            TestCase.setup(-6, -6, 4, 7)  // diagonally to the down left
+            TestCase.setup(-6, -6, 4, 7), // diagonally to the down left
+            TestCase.setup(-20, 0, 0, 10),  // Overshoot in a horizontal line
+            TestCase.setup(-20, -20, 0, 0) // overshoot diagonally
         );
     }
 }
