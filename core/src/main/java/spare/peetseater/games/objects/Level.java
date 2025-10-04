@@ -7,9 +7,10 @@ import java.util.List;
 public class Level {
     private final Obstacle player;
     private final List<Obstacle> obstacles;
+    private final float ballSpeed;
     private final Ball ball;
 
-    public Level(Obstacle player, List<Obstacle> obstacles) {
+    public Level(Obstacle player, List<Obstacle> obstacles, float ballSpeed) {
         this.player = player;
         this.ball = new Ball(
             this.player.getPosition()
@@ -17,6 +18,7 @@ public class Level {
             , Vector2.Zero
         );
         this.obstacles = obstacles;
+        this.ballSpeed = ballSpeed;
     }
 
     public Ball getBall() {
