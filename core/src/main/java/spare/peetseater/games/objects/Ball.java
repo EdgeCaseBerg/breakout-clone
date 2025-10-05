@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Ball {
     private final Vector2 position;
-    private final Vector2 velocity;
+    private Vector2 velocity;
     private Vector2 dimensions;
 
     public Ball(Vector2 position, Vector2 velocity, Vector2 dimensions) {
@@ -18,8 +18,13 @@ public class Ball {
     }
 
     public Ball projectedAt(float time) {
-        Vector2 p = getPosition().add(velocity.scl(time));
+        Vector2 p = getPosition().add(getVelocity().scl(time));
         return new Ball(p, getVelocity());
+    }
+
+    public void update(float time) {
+        position.x += velocity.x * time;
+        position.y += velocity.y * time;
     }
 
     /*
@@ -112,5 +117,13 @@ public class Ball {
 
     public Vector2 getDimensions() {
         return dimensions.cpy();
+    }
+
+    public void setVelocity(Vector2 velocity) {
+        this.velocity = velocity.cpy();
+    }
+
+    public Vector2 getCenter() {
+        return new Vector2(position.x + dimensions.x/2f, position.y + dimensions.y/2f);
     }
 }
