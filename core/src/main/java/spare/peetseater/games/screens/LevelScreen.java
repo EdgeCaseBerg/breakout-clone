@@ -34,7 +34,7 @@ public class LevelScreen implements Scene {
         Vector2 playerPosition = new Vector2(GAME_WIDTH / 2f - 80, 25);
         Vector2 playerSize = new Vector2(160, 45);
         Obstacle player = new Obstacle(playerPosition, playerSize);
-        this.level = new Level(player, obstacles);
+        this.level = new Level(player, obstacles, 50);
         Gdx.app.log(getClass().getSimpleName(), "LOAD: " + getBundleName());
         game.assetManager.load(GameAssets.LEVEL_SCREEN_BUNDLE);
     }
