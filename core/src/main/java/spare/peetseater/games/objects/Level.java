@@ -9,8 +9,10 @@ public class Level {
     private final List<Obstacle> obstacles;
     private final float ballSpeed;
     private final Ball ball;
+    private int score;
 
     public Level(Obstacle player, List<Obstacle> obstacles, float ballSpeed) {
+        this.score = 0;
         this.player = player;
         this.ball = new Ball(
             this.player.getPosition()
@@ -46,6 +48,7 @@ public class Level {
         for (Obstacle obstacle : obstacles) {
             if (this.ball.willIntersect(obstacle, delta)) {
                 collideBallWithObstacle(obstacle, delta);
+                score += toRemove.getWorth();
                 toRemove = obstacle;
                 ballHitSomething = true;
                 break;

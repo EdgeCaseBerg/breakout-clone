@@ -6,15 +6,37 @@ public class Obstacle {
     private final Vector2 position;
     private final Vector2 velocity;
     private final Vector2 dimensions;
+    private final int worth;
 
     public Obstacle(Vector2 position, Vector2 dimensions) {
-        this(position, dimensions, Vector2.Zero.cpy());
+        this(position, dimensions, Vector2.Zero);
     }
 
     public Obstacle(Vector2 position, Vector2 dimensions, Vector2 velocity) {
-        this.position = position;
-        this.dimensions = dimensions;
-        this.velocity = velocity;
+        this(position, dimensions, velocity, 1);
+    }
+
+    public Obstacle(Vector2 position, Vector2 dimensions, Vector2 velocity, int worth) {
+        this.position = position.cpy();
+        this.dimensions = dimensions.cpy();
+        this.velocity = velocity.cpy();
+        this.worth = worth;
+    }
+
+    static Obstacle RedBrick(Vector2 position, Vector2 dimensions) {
+        return new Obstacle(position, dimensions, Vector2.Zero, 7);
+    }
+
+    static Obstacle OrangeBrick(Vector2 position, Vector2 dimensions) {
+        return new Obstacle(position, dimensions, Vector2.Zero, 5);
+    }
+
+    static Obstacle GreenBrick(Vector2 position, Vector2 dimensions) {
+        return new Obstacle(position, dimensions, Vector2.Zero, 3);
+    }
+
+    static Obstacle YellowBrick(Vector2 position, Vector2 dimensions) {
+        return new Obstacle(position, dimensions, Vector2.Zero, 1);
     }
 
     public Vector2 getPosition() {
@@ -40,5 +62,9 @@ public class Obstacle {
 
     public Vector2 getCenter() {
         return new Vector2(position.x + dimensions.x /2f, position.y + dimensions.y/2f);
+    }
+
+    public int getWorth() {
+        return worth;
     }
 }
