@@ -42,12 +42,17 @@ public class Level {
         this.player.update(delta);
         boolean ballHitSomething = false;
         // Obstacle collisions
+        Obstacle toRemove = null;
         for (Obstacle obstacle : obstacles) {
             if (this.ball.willIntersect(obstacle, delta)) {
                 collideBallWithObstacle(obstacle, delta);
+                toRemove = obstacle;
                 ballHitSomething = true;
                 break;
             }
+        }
+        if (toRemove != null) {
+            obstacles.remove(toRemove);
         }
 
         // Paddle collisions
