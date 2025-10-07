@@ -23,19 +23,19 @@ public class Obstacle {
         this.worth = worth;
     }
 
-    static Obstacle RedBrick(Vector2 position, Vector2 dimensions) {
+    public static Obstacle RedBrick(Vector2 position, Vector2 dimensions) {
         return new Obstacle(position, dimensions, Vector2.Zero, 7);
     }
 
-    static Obstacle OrangeBrick(Vector2 position, Vector2 dimensions) {
+    public static Obstacle OrangeBrick(Vector2 position, Vector2 dimensions) {
         return new Obstacle(position, dimensions, Vector2.Zero, 5);
     }
 
-    static Obstacle GreenBrick(Vector2 position, Vector2 dimensions) {
+    public static Obstacle GreenBrick(Vector2 position, Vector2 dimensions) {
         return new Obstacle(position, dimensions, Vector2.Zero, 3);
     }
 
-    static Obstacle YellowBrick(Vector2 position, Vector2 dimensions) {
+    public static Obstacle YellowBrick(Vector2 position, Vector2 dimensions) {
         return new Obstacle(position, dimensions, Vector2.Zero, 1);
     }
 
