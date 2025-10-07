@@ -31,6 +31,7 @@ public class GameAssets {
     public static final AssetDescriptor<TemporaryTexture> RED_SQUARE = new AssetDescriptor<>("redsquare", TemporaryTexture.class, new TemporaryTextureLoader.TemporaryTextureParam(Color.RED));
     public static final AssetDescriptor<TemporaryTexture> YELLOW_SQUARE = new AssetDescriptor<>("yellowsquare", TemporaryTexture.class, new TemporaryTextureLoader.TemporaryTextureParam(Color.YELLOW));
     public static final AssetDescriptor<TemporaryTexture> GREEN_SQUARE = new AssetDescriptor<>("greensquare", TemporaryTexture.class, new TemporaryTextureLoader.TemporaryTextureParam(Color.GREEN));
+    public static final AssetDescriptor<TemporaryTexture> ORANGE_SQUARE = new AssetDescriptor<>("orangesquare", TemporaryTexture.class, new TemporaryTextureLoader.TemporaryTextureParam(Color.ORANGE));
 
     public static final String FADE_OUT_SCREEN_KEY = "fadeout.bundle";
     public static final AssetDescriptor<SceneAssetBundle> FADE_OUT_BUNDLE = new AssetDescriptor<>(FADE_OUT_SCREEN_KEY, SceneAssetBundle.class, new FadeOutBundleParams());

@@ -16,6 +16,8 @@ public class LevelScreenBundleParams extends SceneAssetBundleLoader.SceneAssetBu
         this.dependencies.add(GameAssets.GREEN_SQUARE);
         this.dependencies.add(GameAssets.BLACK_SQUARE);
         this.dependencies.add(GameAssets.YELLOW_SQUARE);
+        this.dependencies.add(GameAssets.RED_SQUARE);
+        this.dependencies.add(GameAssets.ORANGE_SQUARE);
         return this.dependencies;
     }
 }

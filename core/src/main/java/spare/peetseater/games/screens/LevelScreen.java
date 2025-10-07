@@ -58,7 +58,10 @@ public class LevelScreen implements Scene {
         SceneAssetBundle bundle = game.assetManager.get(GameAssets.LEVEL_SCREEN_BUNDLE);
         Texture playerTexture = bundle.get(GameAssets.PLAYER_PADDLE);
         Texture ballTexture = bundle.get(GameAssets.YELLOW_SQUARE);
-        Texture obstacleTexture = bundle.get(GameAssets.GREEN_SQUARE);
+        Texture greenBrickTexture = bundle.get(GameAssets.GREEN_SQUARE);
+        Texture redBrickTexture   = bundle.get(GameAssets.RED_SQUARE);
+        Texture orangeBrickTexture = bundle.get(GameAssets.ORANGE_SQUARE);
+        Texture yellowBrickTexture = bundle.get(GameAssets.YELLOW_SQUARE);
 
         float px = level.getPlayer().getPosition().x;
         float py = level.getPlayer().getPosition().y;
@@ -83,11 +86,19 @@ public class LevelScreen implements Scene {
             float oy = obstacle.getPosition().y;
             float ow = obstacle.getDimensions().x;
             float oh = obstacle.getDimensions().y;
+            Texture obstacleTexture;
+            switch (obstacle.getWorth()) {
+                case 7:  obstacleTexture = redBrickTexture; break;
+                case 5:  obstacleTexture = orangeBrickTexture; break;
+                case 3:  obstacleTexture = greenBrickTexture; break;
+                default: obstacleTexture = yellowBrickTexture; break;
+            }
             game.batch.draw(
                 obstacleTexture,
                 ox, oy, ow, oh
             );
         }
+
     }
 
     @Override
