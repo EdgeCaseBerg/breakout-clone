@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import spare.peetseater.games.GameRunner;
@@ -84,7 +85,23 @@ public class LevelScreen implements Scene {
 
     @Override
     public void update(float seconds) {
-
+        if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
+            this.level.getBall().tmpReset().setVelocity(new Vector2(MathUtils.random(), MathUtils.random()));
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            this.level.launchBall(new Vector2(50, 50));
+        }
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            this.level.getBall().tmpReset(Gdx.input.getX(), Gdx.input.getY()).setVelocity(new Vector2(MathUtils.random(), MathUtils.random()));
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            this.level.getPlayer().setVelocity(new Vector2(-1, 0));
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            this.level.getPlayer().setVelocity(new Vector2(1, 0));
+        } else {
+            this.level.getPlayer().setVelocity(new Vector2(0, 0));
+        }
+        this.level.update(seconds);
     }
 
     @Override

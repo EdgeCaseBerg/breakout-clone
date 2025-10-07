@@ -48,7 +48,7 @@ public class Level {
         for (Obstacle obstacle : obstacles) {
             if (this.ball.willIntersect(obstacle, delta)) {
                 collideBallWithObstacle(obstacle, delta);
-                score += toRemove.getWorth();
+                score += obstacle.getWorth();
                 toRemove = obstacle;
                 ballHitSomething = true;
                 break;
