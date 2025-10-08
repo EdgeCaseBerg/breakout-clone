@@ -1,5 +1,6 @@
 package spare.peetseater.games.objects;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class Obstacle {
@@ -66,5 +67,10 @@ public class Obstacle {
 
     public int getWorth() {
         return worth;
+    }
+
+    public void clamp(Vector2 levelSize) {
+        position.x = MathUtils.clamp(position.x, 0, levelSize.x);
+        position.y = MathUtils.clamp(position.y, 0, levelSize.y);
     }
 }

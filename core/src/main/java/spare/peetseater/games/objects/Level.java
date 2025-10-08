@@ -9,9 +9,15 @@ public class Level {
     private final List<Obstacle> obstacles;
     private final float ballSpeed;
     private final Ball ball;
+    private final Vector2 levelSize;
     private int score;
 
-    public Level(Obstacle player, List<Obstacle> obstacles, float ballSpeed) {
+    public Level(
+        Obstacle player,
+        List<Obstacle> obstacles,
+        float ballSpeed,
+        Vector2 levelSize
+    ) {
         this.score = 0;
         this.player = player;
         this.ball = new Ball(
@@ -21,6 +27,7 @@ public class Level {
         );
         this.obstacles = obstacles;
         this.ballSpeed = ballSpeed;
+        this.levelSize = levelSize;
     }
 
     public void launchBall(Vector2 velocity) {
@@ -66,6 +73,8 @@ public class Level {
         if (!ballHitSomething) {
             this.ball.update(delta);
         }
+        this.ball.clamp(levelSize);
+        this.player.clamp(levelSize);
     }
 
     public Ball getBall() {

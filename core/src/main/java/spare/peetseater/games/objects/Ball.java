@@ -1,5 +1,6 @@
 package spare.peetseater.games.objects;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class Ball {
@@ -125,5 +126,10 @@ public class Ball {
 
     public Vector2 getCenter() {
         return new Vector2(position.x + dimensions.x/2f, position.y + dimensions.y/2f);
+    }
+
+    public void clamp(Vector2 levelSize) {
+        position.x = MathUtils.clamp(position.x, 0, levelSize.x);
+        position.y = MathUtils.clamp(position.y, 0, levelSize.y);
     }
 }
