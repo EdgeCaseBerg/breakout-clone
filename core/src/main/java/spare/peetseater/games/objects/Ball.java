@@ -129,7 +129,11 @@ public class Ball {
     }
 
     public void clamp(Vector2 levelSize) {
-        position.x = MathUtils.clamp(position.x, 0, levelSize.x);
-        position.y = MathUtils.clamp(position.y, 0, levelSize.y);
+        if (position.x < 0 ) velocity.x = velocity.x * -1;
+        if (position.x > levelSize.x - dimensions.x) velocity.x = velocity.x * -1;
+        if (position.y < 0 ) velocity.y = velocity.y * -1;
+        if (position.y > levelSize.y - dimensions.y) velocity.y = velocity.y * -1;
+        position.x = MathUtils.clamp(position.x, 0, levelSize.x - dimensions.x);
+        position.y = MathUtils.clamp(position.y, 0, levelSize.y - dimensions.y);
     }
 }

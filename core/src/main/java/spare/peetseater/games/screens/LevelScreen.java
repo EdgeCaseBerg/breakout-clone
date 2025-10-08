@@ -26,11 +26,6 @@ public class LevelScreen implements Scene {
     public LevelScreen(GameRunner game) {
         this.game = game;
         List<Obstacle> obstacles = new LinkedList<>();
-        // TODO: Make real walls that are seperate from obstacles here
-        obstacles.add(new Obstacle(new Vector2(-1, -1), new Vector2(1, GAME_HEIGHT)));
-        obstacles.add(new Obstacle(new Vector2(GAME_WIDTH , -1), new Vector2(1, GAME_HEIGHT)));
-        obstacles.add(new Obstacle(new Vector2(-1, -1), new Vector2(GAME_WIDTH, 1)));
-        obstacles.add(new Obstacle(new Vector2(-1, GAME_HEIGHT), new Vector2(GAME_WIDTH, 1)));
         // 700 to 1200, nee 8 rows. 500/8 = 62.5
         Vector2 brickSize = new Vector2(150, 30);
         for (float x = 50; x < GAME_WIDTH - 50; x += brickSize.x + 25) {
