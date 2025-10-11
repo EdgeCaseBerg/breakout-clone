@@ -2,6 +2,7 @@ package spare.peetseater.games.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import spare.peetseater.games.GameRunner;
 import spare.peetseater.games.GameAssets;
+import spare.peetseater.games.inputs.PaddleInputHandler;
 import spare.peetseater.games.objects.Level;
 import spare.peetseater.games.objects.Obstacle;
 import spare.peetseater.games.utilities.SceneAssetBundle;
@@ -46,6 +48,8 @@ public class LevelScreen implements Scene {
         this.level = new Level(player, obstacles, 50, levelSize);
         Gdx.app.log(getClass().getSimpleName(), "LOAD: " + getBundleName());
         game.assetManager.load(GameAssets.LEVEL_SCREEN_BUNDLE);
+        PaddleInputHandler paddleInputHandler = new PaddleInputHandler(player);
+        Gdx.input.setInputProcessor(paddleInputHandler);
     }
 
     @Override
@@ -112,13 +116,6 @@ public class LevelScreen implements Scene {
         }
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
             this.level.getBall().tmpReset(Gdx.input.getX(), Gdx.input.getY()).setVelocity(new Vector2(MathUtils.random(), MathUtils.random()));
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            this.level.getPlayer().setVelocity(new Vector2(-1, 0));
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            this.level.getPlayer().setVelocity(new Vector2(1, 0));
-        } else {
-            this.level.getPlayer().setVelocity(new Vector2(0, 0));
         }
         this.level.update(seconds);
     }
