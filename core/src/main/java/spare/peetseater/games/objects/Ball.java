@@ -136,4 +136,10 @@ public class Ball {
         position.x = MathUtils.clamp(position.x, 0, levelSize.x - dimensions.x);
         position.y = MathUtils.clamp(position.y, 0, levelSize.y - dimensions.y);
     }
+
+    public void centeredOnTopOf(Obstacle obstacle) {
+        Vector2 center = obstacle.getCenter();
+        this.position.x = center.x;
+        this.position.y = obstacle.getPosition().y + obstacle.getDimensions().y;
+    }
 }
