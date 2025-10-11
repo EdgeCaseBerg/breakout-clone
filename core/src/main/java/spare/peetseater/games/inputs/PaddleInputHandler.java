@@ -1,6 +1,5 @@
 package spare.peetseater.games.inputs;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector2;
@@ -8,14 +7,17 @@ import spare.peetseater.games.objects.Obstacle;
 
 public class PaddleInputHandler extends InputAdapter {
 
-    private final Obstacle player;
+    protected final Obstacle player;
+    protected int numberOfKeysPressed;
 
     public PaddleInputHandler(Obstacle player) {
         this.player = player;
+        this.numberOfKeysPressed = 0;
     }
 
     @Override
     public boolean keyDown(int keycode) {
+        this.numberOfKeysPressed++;
         switch (keycode) {
             case Input.Keys.LEFT:
                 setPlayerVelocityLeft();
@@ -24,16 +26,17 @@ public class PaddleInputHandler extends InputAdapter {
                 setPlayerVelocityRight();
                 return true;
             default:
-                setPlayerVelocityZero();
                 return super.keyDown(keycode);
         }
     }
 
     @Override
     public boolean keyUp(int keycode) {
+        this.numberOfKeysPressed--;
         switch (keycode) {
-            case Input.Keys.LEFT: setPlayerVelocityZero();
-            case Input.Keys.RIGHT: setPlayerVelocityZero();
+            case Input.Keys.LEFT:
+            case Input.Keys.RIGHT:
+                if (this.numberOfKeysPressed == 0) setPlayerVelocityZero();
                 return true;
             default:
                 return super.keyDown(keycode);
