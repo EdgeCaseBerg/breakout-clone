@@ -10,6 +10,7 @@ public class Level {
     private final float ballSpeed;
     private final Ball ball;
     private final Vector2 levelSize;
+    private boolean ballLaunched;
     private int score;
 
     public Level(
@@ -20,6 +21,7 @@ public class Level {
     ) {
         this.score = 0;
         this.player = player;
+        this.ballLaunched = false;
         this.ball = new Ball(
             this.player.getPosition()
                 .add(player.getDimensions().x/2f, player.getDimensions().y)
@@ -31,6 +33,7 @@ public class Level {
     }
 
     public void launchBall(Vector2 velocity) {
+        this.ballLaunched = true;
         this.ball.setVelocity(velocity);
     }
 
@@ -72,6 +75,9 @@ public class Level {
         }
         if (!ballHitSomething) {
             this.ball.update(delta);
+        }
+        if (!ballLaunched) {
+            this.ball.centeredOnTopOf(this.player);
         }
         this.ball.clamp(levelSize);
         this.player.clamp(levelSize);
