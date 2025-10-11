@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import spare.peetseater.games.GameRunner;
 import spare.peetseater.games.GameAssets;
+import spare.peetseater.games.inputs.LaunchBallInputHandler;
 import spare.peetseater.games.inputs.PaddleInputHandler;
 import spare.peetseater.games.objects.Level;
 import spare.peetseater.games.objects.Obstacle;
@@ -24,6 +25,7 @@ import static spare.peetseater.games.GameRunner.GAME_WIDTH;
 public class LevelScreen implements Scene {
     private final GameRunner game;
     private final Level level;
+    private final LaunchBallInputHandler launchBallInputHandler;
 
     public LevelScreen(GameRunner game) {
         this.game = game;
@@ -46,10 +48,15 @@ public class LevelScreen implements Scene {
         Obstacle player = new Obstacle(playerPosition, playerSize);
         Vector2 levelSize = new Vector2(GAME_WIDTH, GAME_HEIGHT);
         this.level = new Level(player, obstacles, 50, levelSize);
+
         Gdx.app.log(getClass().getSimpleName(), "LOAD: " + getBundleName());
         game.assetManager.load(GameAssets.LEVEL_SCREEN_BUNDLE);
         PaddleInputHandler paddleInputHandler = new PaddleInputHandler(player);
-        Gdx.input.setInputProcessor(paddleInputHandler);
+        launchBallInputHandler = new LaunchBallInputHandler(this.level);
+        InputMultiplexer inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(launchBallInputHandler);
+        inputMultiplexer.addProcessor(paddleInputHandler);
+        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     @Override
@@ -110,9 +117,6 @@ public class LevelScreen implements Scene {
     public void update(float seconds) {
         if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
             this.level.getBall().tmpReset().setVelocity(new Vector2(MathUtils.random(), MathUtils.random()));
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            this.level.launchBall(new Vector2(50, 50));
         }
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
             this.level.getBall().tmpReset(Gdx.input.getX(), Gdx.input.getY()).setVelocity(new Vector2(MathUtils.random(), MathUtils.random()));
