@@ -1,11 +1,8 @@
 package spare.peetseater.games.screens;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
-import com.badlogic.gdx.graphics.Color;
 import spare.peetseater.games.GameAssets;
 import spare.peetseater.games.utilities.SceneAssetBundleLoader;
-import spare.peetseater.games.utilities.TemporaryTexture;
-import spare.peetseater.games.utilities.TemporaryTextureLoader;
 
 import java.util.List;
 
