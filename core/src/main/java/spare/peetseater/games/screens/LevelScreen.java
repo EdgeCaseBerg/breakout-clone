@@ -32,16 +32,17 @@ public class LevelScreen implements Scene {
         List<Obstacle> obstacles = new LinkedList<>();
         // 700 to 1200, nee 8 rows. 500/8 = 62.5
         Vector2 brickSize = new Vector2(150, 30);
-        for (float x = 50; x < GAME_WIDTH - 50; x += brickSize.x + 25) {
-            float padding = 15 + brickSize.y ;
-            obstacles.add(Obstacle.RedBrick(new Vector2(x, 800 - padding), brickSize));
-            obstacles.add(Obstacle.RedBrick(new Vector2(x, 750 - padding), brickSize));
-            obstacles.add(Obstacle.OrangeBrick(new Vector2(x, 700 - padding), brickSize));
-            obstacles.add(Obstacle.OrangeBrick(new Vector2(x, 650 - padding), brickSize));
-            obstacles.add(Obstacle.GreenBrick(new Vector2(x, 600 - padding), brickSize));
-            obstacles.add(Obstacle.GreenBrick(new Vector2(x, 550 - padding), brickSize));
-            obstacles.add(Obstacle.YellowBrick(new Vector2(x, 500 - padding), brickSize));
-            obstacles.add(Obstacle.YellowBrick(new Vector2(x, 450 - padding), brickSize));
+        float padding = 15 + brickSize.y ;
+        float offset = 50;
+        for (float x = 40; x < GAME_WIDTH - 50; x += brickSize.x + 25) {
+            obstacles.add(Obstacle.RedBrick(new Vector2(x, 800 - padding - offset), brickSize));
+            obstacles.add(Obstacle.RedBrick(new Vector2(x, 760 - padding - offset), brickSize));
+            obstacles.add(Obstacle.OrangeBrick(new Vector2(x, 720 - padding - offset), brickSize));
+            obstacles.add(Obstacle.OrangeBrick(new Vector2(x, 680 - padding - offset), brickSize));
+            obstacles.add(Obstacle.GreenBrick(new Vector2(x, 640 - padding - offset), brickSize));
+            obstacles.add(Obstacle.GreenBrick(new Vector2(x, 600 - padding - offset), brickSize));
+            obstacles.add(Obstacle.YellowBrick(new Vector2(x, 560 - padding - offset), brickSize));
+            obstacles.add(Obstacle.YellowBrick(new Vector2(x, 520 - padding - offset), brickSize));
         }
         Vector2 playerPosition = new Vector2(GAME_WIDTH / 2f - 80, 25);
         Vector2 playerSize = new Vector2(80, 20);
