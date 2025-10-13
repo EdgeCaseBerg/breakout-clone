@@ -140,6 +140,6 @@ public class Ball {
     public void centeredOnTopOf(Obstacle obstacle) {
         Vector2 center = obstacle.getCenter();
         this.position.x = center.x;
-        this.position.y = obstacle.getPosition().y + obstacle.getDimensions().y;
+        this.position.y = obstacle.getPosition().y + obstacle.getDimensions().y + 1;
     }
 }
