@@ -28,4 +28,23 @@ public class LaunchBallInputHandler extends PaddleInputHandler {
         }
         return super.keyDown(keycode);
     }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        Vector2 center = this.level.getPlayer().getCenter();
+        float width = this.level.getPlayer().getDimensions().x;
+        float clampedMx = MathUtils.clamp(screenX, center.x - width/2f, center.x + width/2f) - center.x;
+        float unitX = clampedMx / width;
+        launchVector.x = unitX;
+        launchVector.y = 1;
+        return super.mouseMoved(screenX, screenY);
+    }
+
+    public Vector2 getLaunchVector() {
+        return launchVector.cpy();
+    }
+
+    public boolean isLaunched() {
+        return isLaunched;
+    }
 }

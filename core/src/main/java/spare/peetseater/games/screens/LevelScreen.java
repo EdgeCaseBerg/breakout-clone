@@ -88,6 +88,17 @@ public class LevelScreen implements Scene {
             bx, by, bw, bh
         );
 
+        if (!launchBallInputHandler.isLaunched()) {
+            Vector2 launchVector = launchBallInputHandler.getLaunchVector();
+            float lvx = MathUtils.lerp(px, px + pw, launchVector.x + 0.5f);
+            game.batch.draw(
+                playerTexture,
+                lvx,
+                py + ph + 15,
+                10, 10
+            );
+        }
+
         for (Obstacle obstacle : level.getObstacles()) {
             float ox = obstacle.getPosition().x;
             float oy = obstacle.getPosition().y;
