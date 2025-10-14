@@ -3,6 +3,7 @@ package spare.peetseater.games;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import spare.peetseater.games.screens.LevelScreen;
@@ -15,6 +16,7 @@ public class GameRunner implements ApplicationListener {
     public static final float GAME_HEIGHT = 800f;
     public SpriteBatch batch;
     public AssetManager assetManager;
+    public BitmapFont font;
     private Scene loadingScene;
     private FitViewport viewport;
     private OrthographicCamera camera;
@@ -24,6 +26,9 @@ public class GameRunner implements ApplicationListener {
     public void create() {
         assetManager = new AssetManager();
         GameAssets.configure(assetManager);
+        assetManager.load(GameAssets.scoreFont);
+        assetManager.finishLoading();
+        font = GameAssets.getScaledFont(GameAssets.scoreFont, assetManager);
 
         batch = new SpriteBatch();
         camera = new OrthographicCamera(GAME_WIDTH, GAME_HEIGHT);
