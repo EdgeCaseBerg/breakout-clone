@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import spare.peetseater.games.GameRunner;
 import spare.peetseater.games.GameAssets;
@@ -117,6 +118,13 @@ public class LevelScreen implements Scene {
                 ox, oy, ow, oh
             );
         }
+
+        game.font.draw(
+            game.batch,
+            "Score: " + level.getScore(),
+            0, 780,
+            GAME_WIDTH, Align.center, false
+        );
 
     }
 
