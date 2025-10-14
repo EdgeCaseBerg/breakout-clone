@@ -94,4 +94,8 @@ public class Level {
     public Obstacle getPlayer() {
         return player;
     }
+
+    public int getScore() {
+        return this.score;
+    }
 }
