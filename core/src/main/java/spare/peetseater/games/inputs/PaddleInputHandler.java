@@ -17,12 +17,13 @@ public class PaddleInputHandler extends InputAdapter {
 
     @Override
     public boolean keyDown(int keycode) {
-        this.numberOfKeysPressed++;
         switch (keycode) {
             case Input.Keys.LEFT:
+                this.numberOfKeysPressed++;
                 setPlayerVelocityLeft();
                 return true;
             case Input.Keys.RIGHT:
+                this.numberOfKeysPressed++;
                 setPlayerVelocityRight();
                 return true;
             default:
@@ -32,10 +33,10 @@ public class PaddleInputHandler extends InputAdapter {
 
     @Override
     public boolean keyUp(int keycode) {
-        this.numberOfKeysPressed--;
         switch (keycode) {
             case Input.Keys.LEFT:
             case Input.Keys.RIGHT:
+                this.numberOfKeysPressed--;
                 if (this.numberOfKeysPressed == 0) setPlayerVelocityZero();
                 return true;
             default:
