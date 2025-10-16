@@ -2,6 +2,7 @@ package spare.peetseater.games.objects;
 
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Level {
@@ -12,6 +13,7 @@ public class Level {
     private final Vector2 levelSize;
     private boolean ballLaunched;
     private int score;
+    private final List<LevelEventConsumer> consumers;
 
     public Level(
         Obstacle player,
@@ -30,6 +32,11 @@ public class Level {
         this.obstacles = obstacles;
         this.ballSpeed = ballSpeed;
         this.levelSize = levelSize;
+        this.consumers = new LinkedList<>();
+    }
+
+    public void addConsumer(LevelEventConsumer levelEventConsumer) {
+        this.consumers.add(levelEventConsumer);
     }
 
     public void launchBall(Vector2 velocity) {
@@ -52,6 +59,7 @@ public class Level {
 
     public void update(float delta) {
         this.player.update(delta);
+
         boolean ballHitSomething = false;
         // Obstacle collisions
         Obstacle toRemove = null;
@@ -65,7 +73,15 @@ public class Level {
             }
         }
         if (toRemove != null) {
+            for (LevelEventConsumer consumer : consumers) {
+                consumer.onObstacleRemove(this, toRemove);
+            }
             obstacles.remove(toRemove);
+            if (obstacles.isEmpty()) {
+                for (LevelEventConsumer consumer : consumers) {
+                    consumer.onAllObstaclesRemoved(this);
+                }
+            }
         }
 
         // Paddle collisions
@@ -78,6 +94,11 @@ public class Level {
         }
         if (!ballLaunched) {
             this.ball.centeredOnTopOf(this.player);
+        }
+        if (this.ball.getPosition().y <= 0) {
+            for (LevelEventConsumer consumer : consumers) {
+                consumer.onBallOutOfBounds(this);
+            }
         }
         this.ball.clamp(levelSize);
         this.player.clamp(levelSize);
