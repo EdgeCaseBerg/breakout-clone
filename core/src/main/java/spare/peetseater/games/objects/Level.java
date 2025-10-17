@@ -119,4 +119,13 @@ public class Level {
     public int getScore() {
         return this.score;
     }
+
+    public void resetBall() {
+        this.ballLaunched = false;
+        this.ball.setVelocity(Vector2.Zero.cpy());
+        this.ball.setPosition(
+            this.player.getPosition()
+                .add(player.getDimensions().x/2f, player.getDimensions().y)
+        );
+    }
 }
