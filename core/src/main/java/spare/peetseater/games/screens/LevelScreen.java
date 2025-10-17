@@ -198,12 +198,6 @@ public class LevelScreen implements Scene {
 
     @Override
     public void update(float seconds) {
-        if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
-            this.level.getBall().tmpReset(400, 500).setVelocity(new Vector2(MathUtils.random(), MathUtils.random()));
-        }
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-            this.level.getBall().tmpReset(Gdx.input.getX(), Gdx.input.getY()).setVelocity(new Vector2(MathUtils.random(), MathUtils.random()));
-        }
         this.level.update(seconds);
         List<TimedAction> toRemove = new ArrayList<>(2);
         for (TimedAction timedAction : removeActions) {
