@@ -77,6 +77,10 @@ public class GameRunner implements ApplicationListener {
         batch.end();
     }
 
+    public void swapSceneTo(Scene scene) {
+        this.currentScene = scene;
+    }
+
     @Override
     public void pause() {
 
