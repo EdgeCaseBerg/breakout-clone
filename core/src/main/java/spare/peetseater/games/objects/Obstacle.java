@@ -48,6 +48,11 @@ public class Obstacle {
         return dimensions.cpy();
     }
 
+    public void setDimensions(float x, float y) {
+        this.dimensions.x = x;
+        this.dimensions.y = y;
+    }
+
     public Vector2 getVelocity() {
         return velocity.cpy();
     }
