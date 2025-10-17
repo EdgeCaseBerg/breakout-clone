@@ -14,6 +14,7 @@ import spare.peetseater.games.GameAssets;
 import spare.peetseater.games.inputs.LaunchBallInputHandler;
 import spare.peetseater.games.inputs.PaddleInputHandler;
 import spare.peetseater.games.objects.Level;
+import spare.peetseater.games.objects.LevelEventConsumer;
 import spare.peetseater.games.objects.Obstacle;
 import spare.peetseater.games.utilities.SceneAssetBundle;
 
@@ -27,6 +28,9 @@ public class LevelScreen implements Scene {
     private final GameRunner game;
     private final Level level;
     private final LaunchBallInputHandler launchBallInputHandler;
+    private final LinkedList<Object> obstaclesToDisappear;
+    private int lives;
+    private boolean gameOver;
 
     public LevelScreen(GameRunner game) {
         this.game = game;
@@ -49,7 +53,30 @@ public class LevelScreen implements Scene {
         Vector2 playerSize = new Vector2(80, 20);
         Obstacle player = new Obstacle(playerPosition, playerSize);
         Vector2 levelSize = new Vector2(GAME_WIDTH, GAME_HEIGHT);
+        lives = 3;
+        obstaclesToDisappear = new LinkedList<>();
         this.level = new Level(player, obstacles, 50, levelSize);
+        this.level.addConsumer(new LevelEventConsumer() {
+            @Override
+            public void onBallOutOfBounds(Level level) {
+                lives--;
+                launchBallInputHandler.resetLaunched();
+                level.resetBall();
+            }
+
+            @Override
+            public void onObstacleRemove(Level level, Obstacle obstacle) {
+                // We could play a sound here or similar,
+                // but for now we'll just add them to a list we'll fade out or similar.
+                obstaclesToDisappear.add(obstacle);
+            }
+
+            @Override
+            public void onAllObstaclesRemoved(Level level) {
+                // go to the win screen and what have you. For now
+                gameOver = true;
+            }
+        });
 
         Gdx.app.log(getClass().getSimpleName(), "LOAD: " + getBundleName());
         game.assetManager.load(GameAssets.LEVEL_SCREEN_BUNDLE);
@@ -124,6 +151,13 @@ public class LevelScreen implements Scene {
             "Score: " + level.getScore(),
             0, 780,
             GAME_WIDTH, Align.center, false
+        );
+
+        game.font.draw(
+            game.batch,
+            "Balls: " + lives,
+            0, 780,
+            GAME_WIDTH / 3f, Align.center, false
         );
 
     }
