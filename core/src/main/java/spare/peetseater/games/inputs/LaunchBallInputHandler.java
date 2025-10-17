@@ -47,4 +47,8 @@ public class LaunchBallInputHandler extends PaddleInputHandler {
     public boolean isLaunched() {
         return isLaunched;
     }
+
+    public void resetLaunched() {
+        isLaunched = false;
+    }
 }
