@@ -16,8 +16,10 @@ import spare.peetseater.games.inputs.PaddleInputHandler;
 import spare.peetseater.games.objects.Level;
 import spare.peetseater.games.objects.LevelEventConsumer;
 import spare.peetseater.games.objects.Obstacle;
+import spare.peetseater.games.screens.transitions.TimedAction;
 import spare.peetseater.games.utilities.SceneAssetBundle;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,9 +30,9 @@ public class LevelScreen implements Scene {
     private final GameRunner game;
     private final Level level;
     private final LaunchBallInputHandler launchBallInputHandler;
-    private final LinkedList<Object> obstaclesToDisappear;
+    private final LinkedList<Obstacle> obstaclesToDisappear;
+    private final LinkedList<TimedAction> removeActions;
     private int lives;
-    private boolean gameOver;
 
     public LevelScreen(GameRunner game) {
         this.game = game;
@@ -55,6 +57,7 @@ public class LevelScreen implements Scene {
         Vector2 levelSize = new Vector2(GAME_WIDTH, GAME_HEIGHT);
         lives = 3;
         obstaclesToDisappear = new LinkedList<>();
+        removeActions = new LinkedList<>();
         this.level = new Level(player, obstacles, 50, levelSize);
         this.level.addConsumer(new LevelEventConsumer() {
             @Override
@@ -69,12 +72,20 @@ public class LevelScreen implements Scene {
                 // We could play a sound here or similar,
                 // but for now we'll just add them to a list we'll fade out or similar.
                 obstaclesToDisappear.add(obstacle);
+                removeActions.add(new TimedAction(0.100f, () -> {
+                        float y = obstacle.getDimensions().y - 1;
+                        obstacle.setDimensions(obstacle.getDimensions().x, y);
+                        if (y <= 0) {
+                            obstaclesToDisappear.remove(obstacle);
+                            return true;
+                        }
+                        return false;
+                }));
             }
 
             @Override
             public void onAllObstaclesRemoved(Level level) {
-                // go to the win screen and what have you. For now
-                gameOver = true;
+                game.swapSceneTo(new WinScreen(game));
             }
         });
 
@@ -146,6 +157,24 @@ public class LevelScreen implements Scene {
             );
         }
 
+        for (Obstacle obstacle : obstaclesToDisappear) {
+            float ox = obstacle.getPosition().x;
+            float oy = obstacle.getPosition().y;
+            float ow = obstacle.getDimensions().x;
+            float oh = obstacle.getDimensions().y;
+            Texture obstacleTexture;
+            switch (obstacle.getWorth()) {
+                case 7:  obstacleTexture = redBrickTexture; break;
+                case 5:  obstacleTexture = orangeBrickTexture; break;
+                case 3:  obstacleTexture = greenBrickTexture; break;
+                default: obstacleTexture = yellowBrickTexture; break;
+            }
+            game.batch.draw(
+                obstacleTexture,
+                ox, oy, ow, oh
+            );
+        }
+
         game.font.draw(
             game.batch,
             "Score: " + level.getScore(),
@@ -170,12 +199,20 @@ public class LevelScreen implements Scene {
     @Override
     public void update(float seconds) {
         if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
-            this.level.getBall().tmpReset().setVelocity(new Vector2(MathUtils.random(), MathUtils.random()));
+            this.level.getBall().tmpReset(400, 500).setVelocity(new Vector2(MathUtils.random(), MathUtils.random()));
         }
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
             this.level.getBall().tmpReset(Gdx.input.getX(), Gdx.input.getY()).setVelocity(new Vector2(MathUtils.random(), MathUtils.random()));
         }
         this.level.update(seconds);
+        List<TimedAction> toRemove = new ArrayList<>(2);
+        for (TimedAction timedAction : removeActions) {
+            timedAction.update(seconds);
+            if (timedAction.isDone()) {
+                toRemove.add(timedAction);
+            }
+        }
+        removeActions.removeAll(toRemove);
     }
 
     @Override
