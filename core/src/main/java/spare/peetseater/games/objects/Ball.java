@@ -142,4 +142,9 @@ public class Ball {
         this.position.x = center.x;
         this.position.y = obstacle.getPosition().y + obstacle.getDimensions().y + 1;
     }
+
+    public void setPosition(Vector2 position) {
+        this.position.x = position.x;
+        this.position.y = position.y;
+    }
 }
