@@ -65,6 +65,9 @@ public class LevelScreen implements Scene {
                 lives--;
                 launchBallInputHandler.resetLaunched();
                 level.resetBall();
+                if (lives <= 0) {
+                    game.swapSceneTo(new LoseScreen(game));
+                }
             }
 
             @Override
