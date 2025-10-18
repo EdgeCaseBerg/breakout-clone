@@ -23,7 +23,7 @@ public class LaunchBallInputHandler extends PaddleInputHandler {
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.SPACE) {
             this.isLaunched = true;
-            level.launchBall(launchVector.cpy().scl(50));
+            level.launchBall(launchVector.cpy().scl(level.getBallSpeed()));
             return true;
         }
         return super.keyDown(keycode);

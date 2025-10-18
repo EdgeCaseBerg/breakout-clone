@@ -52,7 +52,8 @@ public class Level {
         Vector2 bv = this.ball.getVelocity();
         bv.x = Math.abs(bv.x);
         bv.y = Math.abs(bv.y);
-        Vector2 v = bv.scl(reflection).add(ov);
+        Vector2 v = bv.scl(reflection).add(ov).scl(1.1f);
+        v.clamp(-250f, 250f);
         this.ball.setVelocity(v);
         this.ball.update(delta);
     }
@@ -127,5 +128,9 @@ public class Level {
             this.player.getPosition()
                 .add(player.getDimensions().x/2f, player.getDimensions().y)
         );
+    }
+
+    public float getBallSpeed() {
+        return ballSpeed;
     }
 }
